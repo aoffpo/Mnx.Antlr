@@ -1,0 +1,12 @@
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\MSSql2008Lexer.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\MSSql2008Parser.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\MSSql2008Listener.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\MSSql2008BaseListener.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\MSSql2008Visitor.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\MSSql2008BaseVisitor.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\SQLiteLexer.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\SQLiteParser.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\SQLiteListener.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\SQLiteBaseListener.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\SQLiteVisitor.cs
+C:\Users\Steve\git\Mnx.Antlr.Parsers\obj\Debug\SQLiteBaseVisitor.cs
