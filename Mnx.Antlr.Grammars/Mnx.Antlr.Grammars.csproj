@@ -46,18 +46,19 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Grammars\MSSql2008\Sql_reducedParser.g4.cs">
+      <DependentUpon>Sql_reducedParser.g4</DependentUpon>
+    </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Antlr4 Include="Grammars\MSSql2008\MSSql2008.g4">
+    <Antlr4 Include="Grammars\MSSql2008\Sql_reducedLexer.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Mnx.Antlr.Grammars.MSSql2008</CustomToolNamespace>
-      <Listener>True</Listener>
-      <ForceAtn>False</ForceAtn>
     </Antlr4>
-    <Antlr4 Include="Grammars\SQLite\SQLite.g4">
+    <Antlr4 Include="Grammars\MSSql2008\Sql_reducedParser.g4">
       <Generator>MSBuild:Compile</Generator>
-      <CustomToolNamespace>Mnx.Antlr.Grammars.SQLite</CustomToolNamespace>
+      <CustomToolNamespace>Mnx.Antlr.Grammars.MSSql2008</CustomToolNamespace>
     </Antlr4>
     <None Include="packages.config" />
   </ItemGroup>

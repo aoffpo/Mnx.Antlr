@@ -51,27 +51,28 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\MSSql2008BaseListener.cs">
-      <Link>LinkedFiles\MSSql2008BaseListener.cs</Link>
+    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedLexer.cs">
+      <Link>LinkedFiles\Sql_reducedLexer.cs</Link>
     </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\MSSql2008BaseVisitor.cs">
-      <Link>LinkedFiles\MSSql2008BaseVisitor.cs</Link>
+    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParser.cs">
+      <Link>LinkedFiles\Sql_reducedParser.cs</Link>
     </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\MSSql2008Lexer.cs">
-      <Link>LinkedFiles\MSSql2008Lexer.cs</Link>
+    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserBaseListener.cs">
+      <Link>LinkedFiles\Sql_reducedParserBaseListener.cs</Link>
     </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\MSSql2008Listener.cs">
-      <Link>LinkedFiles\MSSql2008Listener.cs</Link>
+    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserBaseVisitor.cs">
+      <Link>LinkedFiles\Sql_reducedParserBaseVisitor.cs</Link>
     </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\MSSql2008Parser.cs">
-      <Link>LinkedFiles\MSSql2008Parser.cs</Link>
+    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserListener.cs">
+      <Link>LinkedFiles\Sql_reducedParserListener.cs</Link>
     </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\MSSql2008Visitor.cs">
-      <Link>LinkedFiles\MSSql2008Visitor.cs</Link>
+    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserVisitor.cs">
+      <Link>LinkedFiles\Sql_reducedParserVisitor.cs</Link>
     </Compile>
     <Compile Include="Listeners\Sql2008Listener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Visitors\Sql2008Visitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
