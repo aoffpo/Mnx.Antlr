@@ -22,7 +22,8 @@ batch : genericStatement;
 
 genericStatement : dmlStatement;
 
-dmlStatement : selectStatement;
+dmlStatement : selectStatement
+			 | createTableStatement;
 
  //Id
  //   | QuotedId | ;
@@ -30,60 +31,96 @@ dmlStatement : selectStatement;
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 // SELECT Statement
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
-selectStatement : selectQuery ;//'select' columnName (',' columnName)* 'from' tableName;
-//selectQuery : SELECT columnItemList fromClause;
-selectQuery : (SELECT) columnName (COMMA columnName)* FROM tableName ;  
+selectStatement : selectQuery;
+selectQuery : SELECT columnItemList fromClause; 
+columnItemList : columnNameList
+	| columnWildQualifiedList
+	| columnNameQualifiedList;
+columnNameList : columnName (COMMA columnName)*;
+columnNameQualified : columnName
+    | tableName '.' columnName
+    | variableName '.' columnName;
+columnNameQualifiedList : columnNameQualified (COMMA columnNameQualified)*;
+columnWild : ASTERISK;
+columnWildQualified : columnWild
+    | objectName DOT columnWild
+    | variableName DOT columnWild;
+columnWildQualifiedList : columnWildQualified (COMMA columnWildQualified)*;
 
-//columnItemList : columnNameList;
-//	| columnWildQualifiedList
-//	| columnNameQualifiedList;
-
-//columnNameList : columnName (',' columnName)*;
-//columnNameList : columnName ',' columnNameList
-//    | columnName;
-
-//columnItem : columnWildQualified
-//    | variableName;
-
-//columnNameQualified : columnName
-//    | tableName '.' columnName
-//    | variableName '.' columnName;
-
-//columnNameQualifiedList : columnNameQualified ',' columnNameQualifiedList
-//    | columnNameQualified;
-
-//columnWild : '*';
-
-//columnWildQualified : columnWild
-//    | objectName '.' columnWild;
-// //   | variableName '.' columnWild;
-// columnWildQualifiedList : columnWildQualified ',' columnWildQualifiedList
-//    | columnWildQualified;
-
-//fromClause : FROM source;
+fromClause : FROM tableName;
 ////WhereClause : WHERE Predicate
 ////    |
 ////    ;
 //source : sourceRowset;
 //sourceRowset : variableName;
-
-columnName 
+ 
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// CREATE TABLE Statement
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
+createTableStatement
+ : CREATE TABLE
+   ( databaseName DOT )? (tempTableName | tableName) 
+  // ( LPAREN columnName ( COMMA columnName )* ( COMMA table_constraint )* RPAREN ( K_WITHOUT IDENTIFIER )?
+   ( LPAREN columnDescription ( COMMA columnDescription )* RPAREN )
+   | AS selectStatement 
+ ;
+columnDescription : columnName datatype (NOT)? NULL identityStatement?;
+ //table_constraint
+ //: ( K_CONSTRAINT name )?
+ //  ( ( K_PRIMARY K_KEY | K_UNIQUE ) '(' indexed_column ( ',' indexed_column )* ')' conflict_clause
+ //  | K_CHECK '(' expr ')'
+ //  | K_FOREIGN K_KEY '(' column_name ( ',' column_name )* ')' foreign_key_clause
+ //  )
+ //;
+identityStatement : IDENTITY LPAREN DIGIT+ COMMA DIGIT+ RPAREN;
+varcharStatement :  (VARCHAR | NVARCHAR | NCHAR | CHAR) LPAREN DIGIT* RPAREN;
+decimalStatement :  DECIMAL LPAREN DIGIT+ COMMA DIGIT+ RPAREN;
+ //decimal : decimal ( digit comma digit)
+variableName 
 	: anyname 
+	;
+objectName 
+	: anyname 
+	;
+columnName 
+	: (LBRACKET)? anyname (RBRACKET)? 
 	;
 tableName 
 	: anyname 
 	;
-//variableName : objectName;
-//objectName : IDENTIFIER ;
-
+tempTableName 
+	: POUND tableName;
+databaseName 
+	: anyname 
+	;
 anyname
- : IDENTIFIER 
- | keyword
- | STRING_LITERAL
- ;
+	: IDENTIFIER 
+	| keyword
+	| STRING_LITERAL
+	;
+ datatype : 
+	BIT
+	| DATETIME
+	| DECIMAL
+	| FLOAT
+	| INT
+	| varcharStatement
+	| decimalStatement
+	; 
  keyword 
- : SELECT
- | FROM
- ;
+	 : SELECT
+	 | FROM
+	 | ACTION
+	 | SELECT
+	 | FROM 
+	 | WHERE 
+	 | FOR
+	 | TABLE
+	 | NOT 
+	 | NULL
+	 | IDENTITY
+	 | AS
+	 | datatype
+	 ;
 
  //island grammar for interior spaces ~mnop
