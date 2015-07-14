@@ -44,7 +44,13 @@ namespace Mnx.Antlr.Console
         private const string SELECT = "select colname1,colname2,column3 from myTable";
         static void Main(string[] args)
         {
-            var inputStream = new AntlrInputStream(CREATE);
+            if (args.Length != 1)
+            {
+                System.Console.WriteLine("Filename is required");
+                return;
+            }
+            var stream = new FileStream(args[0], FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
+            var inputStream = new AntlrInputStream(stream);
             var lexer = new MSSql2008Lexer(inputStream);
             var tokens = new CommonTokenStream(lexer);
             var parser = new MSSql2008Parser(tokens);
