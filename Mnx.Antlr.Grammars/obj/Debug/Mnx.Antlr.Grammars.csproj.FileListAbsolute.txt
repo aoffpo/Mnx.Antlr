@@ -11,3 +11,4 @@ C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserBaseV
 C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Mnx.Antlr.Grammars.csproj.Antlr4GeneratedCodeFileListAbsolute.txt
 C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Mnx.Antlr.Grammars.dll
 C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Mnx.Antlr.Grammars.pdb
+C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Mnx.Antlr.Grammars.csprojResolveAssemblyReference.cache

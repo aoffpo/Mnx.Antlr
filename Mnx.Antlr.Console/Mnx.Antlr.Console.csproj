@@ -69,10 +69,10 @@
     <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserVisitor.cs">
       <Link>LinkedFiles\Sql_reducedParserVisitor.cs</Link>
     </Compile>
-    <Compile Include="Listeners\Sql2008Listener.cs" />
+    <Compile Include="Listeners\SqlReducedListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Visitors\Sql2008Visitor.cs" />
+    <Compile Include="Visitors\SqlReducedVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

@@ -54,11 +54,11 @@
   <ItemGroup>
     <Antlr4 Include="Grammars\MSSql2008\Sql_reducedLexer.g4">
       <Generator>MSBuild:Compile</Generator>
-      <CustomToolNamespace>Mnx.Antlr.Grammars.MSSql2008</CustomToolNamespace>
+      <CustomToolNamespace>Mnx.Antlr.Grammars.SqlReduced</CustomToolNamespace>
     </Antlr4>
     <Antlr4 Include="Grammars\MSSql2008\Sql_reducedParser.g4">
       <Generator>MSBuild:Compile</Generator>
-      <CustomToolNamespace>Mnx.Antlr.Grammars.MSSql2008</CustomToolNamespace>
+      <CustomToolNamespace>Mnx.Antlr.Grammars.SqlReduced</CustomToolNamespace>
     </Antlr4>
     <None Include="packages.config" />
   </ItemGroup>

@@ -18,13 +18,18 @@ options { tokenVocab=Sql_reducedLexer; }
 prog : batch EOF;
   //  | Batch GoBatchList
 	//;
-batch : genericStatement;
+batch : genericStatement 
+	;
 
-genericStatement : dmlStatement;
+genericStatement : dmlStatement+;
 
-dmlStatement : selectStatement
-			 | createTableStatement;
-
+dmlStatement : setStatement 
+			 | selectStatement
+			 | createTableStatement
+			 | ifStatement
+			 | dropTableStatement
+			 | insertStatement
+			 ;
  //Id
  //   | QuotedId | ;
 
@@ -32,12 +37,14 @@ dmlStatement : selectStatement
 // SELECT Statement
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
 selectStatement : selectQuery;
-selectQuery : SELECT columnItemList fromClause; 
+selectQuery : SELECT columnItemList fromClause
+			| SELECT ((LITERAL | NULL) AS IDENTIFIER) (COMMA (LITERAL | NULL) AS columnNameQualified)* 
+; 
 columnItemList : columnNameList
 	| columnWildQualifiedList
 	| columnNameQualifiedList;
 columnNameList : columnName (COMMA columnName)*;
-columnNameQualified : columnName
+columnNameQualified : columnName 
     | tableName '.' columnName
     | variableName '.' columnName;
 columnNameQualifiedList : columnNameQualified (COMMA columnNameQualified)*;
@@ -64,7 +71,7 @@ createTableStatement
    ( LPAREN columnDescription ( COMMA columnDescription )* RPAREN )
    | AS selectStatement 
  ;
-columnDescription : columnName datatype (NOT)? NULL identityStatement?;
+columnDescription : columnName datatype (NOT)? NULL columnConstraint?;
  //table_constraint
  //: ( K_CONSTRAINT name )?
  //  ( ( K_PRIMARY K_KEY | K_UNIQUE ) '(' indexed_column ( ',' indexed_column )* ')' conflict_clause
@@ -72,9 +79,58 @@ columnDescription : columnName datatype (NOT)? NULL identityStatement?;
  //  | K_FOREIGN K_KEY '(' column_name ( ',' column_name )* ')' foreign_key_clause
  //  )
  //;
+ 
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+// SET (both variables and options, but not yet CLR UDT properties and fields)
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
+
+setStatement : (setVariableStatement
+    | setOptionStatement) SEMICOLON;
+setVariableStatement : SET objectName COLON ;//Expression
+//    | SET objectName '.' NamedFunctionList
+//    | SET objectName ':' CursorDefinition;
+
+setOptionStatement : 
+	SET NOCOUNT setValue;
+    //  SET Id SetValueList
+    //| SET TRANSACTION SetValueList
+    //| SET OFFSETS SetValueList
+    //| SET ROWCOUNT SetValue
+    //| SET STATISTICS SetValueList
+    //| SET IDENTITY_INSERT TableNameQualified Toggle;
+
+//SetValueList : SetValue SetValueList
+//    | SetValue;
+
+setValue : toggle ;
+   /* Id
+    | READ UNCOMMITTED
+    | READ COMMITTED
+    | REPEATABLE READ
+    | Toggle
+    | IntegerLiteral
+    | StringValue;*/
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//  INSERT Statement
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
+insertStatement : insertColumnSpec insertSelectSpec ;
+insertColumnSpec : INSERT (tempTableName | objectName) LPAREN columnItemList RPAREN ;
+insertSelectSpec : ( SELECT (aliasedSetValue)+ unionAll )+ ;
+aliasedSetValue : COMMA? (LITERAL | NULL)  AS columnName ;
+
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
+//  Statement
+// :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
+columnConstraint : identityStatement;
 identityStatement : IDENTITY LPAREN DIGIT+ COMMA DIGIT+ RPAREN;
+ifStatement : IF OBJECT_ID LPAREN IDENTIFIER RPAREN IS NOT NULL dropTableStatement;
 varcharStatement :  (VARCHAR | NVARCHAR | NCHAR | CHAR) LPAREN DIGIT* RPAREN;
 decimalStatement :  DECIMAL LPAREN DIGIT+ COMMA DIGIT+ RPAREN;
+dropTableStatement : DROP TABLE tempTableName ;
+unionAll : UNION ALL ;
+toggle : ON
+    | OFF;
  //decimal : decimal ( digit comma digit)
 variableName 
 	: anyname 
@@ -89,14 +145,14 @@ tableName
 	: anyname 
 	;
 tempTableName 
-	: POUND tableName;
+	: (POUND tableName);
 databaseName 
 	: anyname 
 	;
 anyname
 	: IDENTIFIER 
 	| keyword
-	| STRING_LITERAL
+	//| STRING_LITERAL
 	;
  datatype : 
 	BIT
@@ -108,10 +164,12 @@ anyname
 	| decimalStatement
 	; 
  keyword 
-	 : SELECT
+	 : ALL 
+	 | SELECT
 	 | FROM
 	 | ACTION
 	 | SELECT
+	 | SET
 	 | FROM 
 	 | WHERE 
 	 | FOR
@@ -120,6 +178,12 @@ anyname
 	 | NULL
 	 | IDENTITY
 	 | AS
+	 | DROP
+	 | OBJECT_ID
+	 | ON
+	 | OFF
+	 | TEMPDB
+	 | UNION
 	 | datatype
 	 ;
 
