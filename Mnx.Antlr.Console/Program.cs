@@ -1,6 +1,10 @@
 ﻿using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.IO;
+using System.Text;
+using System.Web.UI;
+using Mnx.Antlr.Console.Classes;
+using Mnx.Antlr.Console.Listeners;
 using Mnx.Antlr.Grammars.SqlReduced;
 namespace Mnx.Antlr.Console
 {
@@ -42,11 +46,25 @@ namespace Mnx.Antlr.Console
             }
             var stream = new FileStream(args[0], FileMode.Open, FileAccess.Read, FileShare.ReadWrite);
             var inputStream = new AntlrInputStream(stream);
+            
             var lexer = new Sql_reducedLexer(inputStream);
             var tokens = new CommonTokenStream(lexer);
             var parser = new Sql_reducedParser(tokens);
-            IParseTree tree = parser.prog();
-            System.Console.WriteLine(tree.ToStringTree(parser));
+
+            ParserRuleContext tree = parser.prog();
+            var walker = new ParseTreeWalker();
+
+            var stringWriter = new StringWriter();
+            var styleBuilder = new CssBuilder();
+            using (var writer = new HtmlTextWriter(stringWriter))
+            {                
+                //writer : html head /head body
+                writer.RenderBeginTag(HtmlTextWriterTag.Html);
+                walker.Walk(new SqlReducedListener(styleBuilder, writer), tree);
+                writer.RenderEndTag();//html
+                
+            }
+             System.Console.WriteLine(stringWriter);
             //var visitor = new MSSql2008BaseVisitor<string>();
             //System.Console.WriteLine(visitor.Visit(tree));
 

@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -69,6 +70,7 @@
     <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserVisitor.cs">
       <Link>LinkedFiles\Sql_reducedParserVisitor.cs</Link>
     </Compile>
+    <Compile Include="Classes\CssBuilder.cs" />
     <Compile Include="Listeners\SqlReducedListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
