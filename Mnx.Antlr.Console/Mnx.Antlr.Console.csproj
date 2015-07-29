@@ -71,6 +71,7 @@
       <Link>LinkedFiles\Sql_reducedParserVisitor.cs</Link>
     </Compile>
     <Compile Include="Classes\CssBuilder.cs" />
+    <Compile Include="Classes\TypeResolver.cs" />
     <Compile Include="Listeners\SqlReducedListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

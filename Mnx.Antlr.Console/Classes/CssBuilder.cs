@@ -16,31 +16,45 @@ namespace Mnx.Antlr.Console.Classes
     {
         private StringBuilder _styles;
 
-        public String Styles
+        public string Styles
         {
-            get
-            {
-                if (!_styles.ToString().EndsWith("</style>"))
-                {
-                    _styles.Append("</style>");
-                }
-                return _styles.ToString();
-            }
+            get { return _styles.ToString(); }
         }
 
         public CssBuilder()
         {
             _styles = new StringBuilder();
-            _styles.Append("<style type=\"text/css\">");
+         
+            //add default styles
+            _styles.AppendLine(".notnullable {background-color:red;}");
+            _styles.AppendLine(".typemismatch { color: red;}");
+            _styles.AppendLine(" th, td {border: 1px solid black;}");
         }
 
         public string CreateSelector(string name)
         {
-            return string.Empty;
+            return name + "{ }";
         }
 
         public string AddProperty(string selector, string property, string value)
         {
+            var styleList = _styles.ToString();
+            selector = selector.Replace("[", "").Replace("]", "");
+            var newProp = property + ":" + value + ";";
+            //find selector in _styles
+            var selectorIndex = styleList.IndexOf(selector, StringComparison.Ordinal);
+            if (selectorIndex == -1)
+            {
+                _styles.AppendFormat("{0} {{ {1}:{2}; }}",selector,property,value);
+            }
+            else
+            {
+                
+                //var startIndex = selectorIndex + selector.Length + 2;
+                //append text at index
+                //_styles.Insert(startIndex, newProp);
+            }
+            _styles.AppendLine();
             return selector;
         }
     }

@@ -1,4 +1,5 @@
-﻿using Antlr4.Runtime;
+﻿using System.Diagnostics;
+using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using System.IO;
 using System.Text;
@@ -64,10 +65,9 @@ namespace Mnx.Antlr.Console
                 writer.RenderEndTag();//html
                 
             }
-             System.Console.WriteLine(stringWriter);
-            //var visitor = new MSSql2008BaseVisitor<string>();
-            //System.Console.WriteLine(visitor.Visit(tree));
-
+        //     System.Console.WriteLine(stringWriter);           
+            File.WriteAllText("output.html",stringWriter.ToString());
+            Process.Start("output.html");
         }
     }
 }

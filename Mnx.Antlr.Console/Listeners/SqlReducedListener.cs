@@ -187,12 +187,15 @@ namespace Mnx.Antlr.Console.Listeners
         public void EnterCreateTableStatement(Sql_reducedParser.CreateTableStatementContext context)
         {
             _writer.RenderBeginTag(HtmlTextWriterTag.Head);
+            _writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/css");
             _writer.RenderBeginTag(HtmlTextWriterTag.Style);
+            
         }
 
         public void ExitCreateTableStatement(Sql_reducedParser.CreateTableStatementContext context)
         {
-            _writer.RenderEndTag();
+            _writer.Write(_styles.Styles);
+            _writer.RenderEndTag();            
             _writer.RenderEndTag();
             //create css for table definition
             //add content style for "NULL" conten when in non-null style
@@ -207,14 +210,18 @@ namespace Mnx.Antlr.Console.Listeners
         public void ExitColumnDescription(Sql_reducedParser.ColumnDescriptionContext context)
         {
             var constraint = context.columnConstraint();
-            var columnName = context.columnName().GetText();
-           // System.Console.WriteLine("1:" +columnName);
-           //System.Console.WriteLine("2:" + context.datatype().GetText());
-           // System.Console.WriteLine("3:" + (constraint == null ? string.Empty : constraint.GetText()));
-           // System.Console.WriteLine("4:" + (constraint == null ? string.Empty : constraint.GetText()));
-            //create css
-    
-           // _styles.AppendLine(cssClass.ToString());
+            var columnName = "#" + context.columnName().GetText();
+            var dataType = "." +context.datatype().GetText().ToLower();
+            
+            //identity style
+            _styles.CreateSelector(columnName);
+            var value = constraint != null ? "yellow" : "white";
+            _styles.AddProperty(columnName, "background-color", value);
+
+            //datatype style
+            _styles.CreateSelector(dataType);
+            value = dataType == ".int" ? "blue" : "white";
+            _styles.AddProperty(dataType, "background-color", value);
 
         }
 
@@ -262,6 +269,7 @@ namespace Mnx.Antlr.Console.Listeners
         {
            _writer.RenderBeginTag(HtmlTextWriterTag.Body);
             _writer.RenderBeginTag(HtmlTextWriterTag.Table);
+            _writer.RenderBeginTag(HtmlTextWriterTag.Tr);
         }
 
         public void ExitInsertStatement(Sql_reducedParser.InsertStatementContext context)
@@ -273,13 +281,12 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void EnterInsertColumnSpec(Sql_reducedParser.InsertColumnSpecContext context)
         {
-            
+           
         }
 
         public void ExitInsertColumnSpec(Sql_reducedParser.InsertColumnSpecContext context)
         {
-            //create header row
-            //map columns to css created in CREATE Table
+            
         }
 
         public void EnterInsertSelectSpec(Sql_reducedParser.InsertSelectSpecContext context)
@@ -290,9 +297,10 @@ namespace Mnx.Antlr.Console.Listeners
         public void ExitInsertSelectSpec(Sql_reducedParser.InsertSelectSpecContext context)
         {
             //create table cell
+            
             //set css classes
             //insert value
-            
+
         }
 
         public void EnterAliasedSetValue(Sql_reducedParser.AliasedSetValueContext context)
@@ -302,7 +310,25 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitAliasedSetValue(Sql_reducedParser.AliasedSetValueContext context)
         {
-            
+            //if (context.objectName() == null) return;
+            var value = context.LITERAL() == null ? "" : context.LITERAL().GetText();
+            //context.columnItemList().
+
+            var columnName = context.columnName().GetText();
+            columnName = columnName.Replace("[", "");
+            columnName = columnName.Replace("]", "");
+            value = value.Replace("N'", "");
+            value = value.Replace("'", "");
+            var datatype = "";//find datatype in styles by column name //context.datatype().GetText();
+
+            //map columns to css created in CREATE Table
+            //find datatype info in styles, check value against data type and add .typemismatch if mismatched
+            var isResolved = TypeResolver.Resolve(datatype, value);
+            //check if column not nullable; add .notnullable if NULL
+            _writer.AddAttribute(HtmlTextWriterAttribute.Class, isResolved ? columnName : "typemismatch");
+            _writer.RenderBeginTag(HtmlTextWriterTag.Td);         
+            _writer.Write(value);
+            _writer.RenderEndTag();
         }
 
         public void EnterColumnConstraint(Sql_reducedParser.ColumnConstraintContext context)
@@ -367,12 +393,12 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void EnterUnionAll(Sql_reducedParser.UnionAllContext context)
         {
-            
+            _writer.RenderEndTag();
         }
 
         public void ExitUnionAll(Sql_reducedParser.UnionAllContext context)
         {
-            
+            _writer.RenderBeginTag(HtmlTextWriterTag.Tr);
         }
 
         public void EnterToggle(Sql_reducedParser.ToggleContext context)
