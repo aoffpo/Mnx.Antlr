@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using System.Web.UI;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
@@ -11,11 +13,15 @@ namespace Mnx.Antlr.Console.Listeners
     {
         private HtmlTextWriter _writer;
         private CssBuilder _styles;
+        private Dictionary<string, string> _typeLookup;
+        private List<string> _notnullLookup; 
 
         public SqlReducedListener(CssBuilder styles, HtmlTextWriter writer)
         {
             _writer = writer;
             _styles = styles;
+            _typeLookup = new Dictionary<string, string>();
+            _notnullLookup = new List<string>();
         }
 
         //public SqlReducedListener(Stream filestream)
@@ -210,9 +216,14 @@ namespace Mnx.Antlr.Console.Listeners
         public void ExitColumnDescription(Sql_reducedParser.ColumnDescriptionContext context)
         {
             var constraint = context.columnConstraint();
-            var columnName = "#" + context.columnName().GetText();
-            var dataType = "." +context.datatype().GetText().ToLower();
-            
+            var columnName = context.columnName().GetText().Replace("[","").Replace("]","");
+            var dataType =  context.datatype().GetText().ToLower();
+            var nullable = context.NOT()== null;
+            _typeLookup.Add(columnName, dataType);
+            if (!nullable) _notnullLookup.Add(columnName);
+
+            columnName = "#" +columnName;
+            dataType = "." + dataType;
             //identity style
             _styles.CreateSelector(columnName);
             var value = constraint != null ? "yellow" : "white";
@@ -222,6 +233,7 @@ namespace Mnx.Antlr.Console.Listeners
             _styles.CreateSelector(dataType);
             value = dataType == ".int" ? "blue" : "white";
             _styles.AddProperty(dataType, "background-color", value);
+            
 
         }
 
@@ -319,13 +331,17 @@ namespace Mnx.Antlr.Console.Listeners
             columnName = columnName.Replace("]", "");
             value = value.Replace("N'", "");
             value = value.Replace("'", "");
-            var datatype = "";//find datatype in styles by column name //context.datatype().GetText();
+            var datatype = "";
+            _typeLookup.TryGetValue(columnName, out datatype);
 
             //map columns to css created in CREATE Table
-            //find datatype info in styles, check value against data type and add .typemismatch if mismatched
+            //find datatype info in dictionary, check value against data type and add .typemismatch if mismatched
             var isResolved = TypeResolver.Resolve(datatype, value);
             //check if column not nullable; add .notnullable if NULL
-            _writer.AddAttribute(HtmlTextWriterAttribute.Class, isResolved ? columnName : "typemismatch");
+            var notnull = _notnullLookup.Any(n => n == columnName);
+            if (notnull && value.ToUpper() == "")
+                _writer.AddAttribute(HtmlTextWriterAttribute.Class, "notnullable");
+            else _writer.AddAttribute(HtmlTextWriterAttribute.Class, isResolved ? columnName : "typemismatch");
             _writer.RenderBeginTag(HtmlTextWriterTag.Td);         
             _writer.Write(value);
             _writer.RenderEndTag();
