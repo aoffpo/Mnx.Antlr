@@ -1,6 +1,0 @@
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedLexer.cs
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParser.cs
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserListener.cs
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserBaseListener.cs
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserVisitor.cs
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedParserBaseVisitor.cs

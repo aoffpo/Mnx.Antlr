@@ -1,7 +1,0 @@
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Console\bin\Debug\Mnx.Antlr.Console.exe.config
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Console\bin\Debug\Mnx.Antlr.Console.exe
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Console\bin\Debug\Mnx.Antlr.Console.pdb
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Console\bin\Debug\Antlr4.Runtime.dll
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Console\bin\Debug\Antlr4.Runtime.xml
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Console\obj\Debug\Mnx.Antlr.Console.exe
-C:\Users\Steve\git\Mnx.Antlr\Mnx.Antlr.Console\obj\Debug\Mnx.Antlr.Console.pdb
