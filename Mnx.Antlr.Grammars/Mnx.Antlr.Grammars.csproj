@@ -49,8 +49,8 @@
     <Compile Include="Grammars\MSSql2008\Sql_reducedParser.g4.cs">
       <DependentUpon>Sql_reducedParser.g4</DependentUpon>
     </Compile>
-    <Compile Include="Grammars\Post.en\Post.en.g4.cs">
-      <DependentUpon>Post.en.g4</DependentUpon>
+    <Compile Include="Grammars\Post.en\Post_en_Parser.g4.cs">
+      <DependentUpon>Post_en_Parser.g4</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -66,6 +66,10 @@
     <Antlr4 Include="Grammars\Post.en\Post_en_Lexer.g4">
       <Generator>MSBuild:Compile</Generator>
       <CustomToolNamespace>Mnx.Antlr.Grammars.Post.en</CustomToolNamespace>
+    </Antlr4>
+    <Antlr4 Include="Grammars\Post.en\Post_en_Parser.g4">
+      <Generator>MSBuild:Compile</Generator>
+      <CustomToolNamespace>Mnx.Antlr.Grammars.Grammars.Post.en</CustomToolNamespace>
     </Antlr4>
     <None Include="packages.config" />
   </ItemGroup>
