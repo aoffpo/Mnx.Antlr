@@ -18,6 +18,7 @@
 #pragma warning disable 1591
 
 namespace Mnx.Antlr.Grammars.Grammars.Post.en {
+#pragma warning disable 3021
 using Antlr4.Runtime;
 using Antlr4.Runtime.Atn;
 using Antlr4.Runtime.Misc;
@@ -30,22 +31,31 @@ using DFA = Antlr4.Runtime.Dfa.DFA;
 public partial class Post_en_Parser : Parser {
 	public const int
 		YESTERDAY=1, TODAY=2, TOMORROW=3, TONIGHT=4, MORNING=5, AFTERNOON=6, EVENING=7, 
-		DAY=8, SUNDAY=9, MONDAY=10, TUESDAY=11, WEDNESDAY=12, THURSDAY=13, FRIDAY=14, 
-		SATURDAY=15, DIGIT=16, WS=17;
+		AM=8, PM=9, TIMEOFDAY=10, LUNCH=11, DINNER=12, BREAKFAST=13, BRUNCH=14, 
+		DAY=15, SUNDAY=16, MONDAY=17, TUESDAY=18, WEDNESDAY=19, THURSDAY=20, FRIDAY=21, 
+		SATURDAY=22, DAYOFWEEK=23, TO_BE=24, WE=25, YOU=26, OUR=27, US=28, PRONOUN=29, 
+		TO=30, FROM=31, IN=32, ON=33, AT=34, OF=35, WITH=36, PREPOSITION=37, THE=38, 
+		FOR=39, AND=40, DIGIT=41, STRING=42, IDENTIFIER=43, WS=44;
 	public const int
-		RULE_post = 0;
+		RULE_post = 0, RULE_statement = 1, RULE_phrase = 2, RULE_subject = 3, 
+		RULE_predicate = 4, RULE_object = 5, RULE_verb = 6;
 	public static readonly string[] ruleNames = {
-		"post"
+		"post", "statement", "phrase", "subject", "predicate", "object", "verb"
 	};
 
 	private static readonly string[] _LiteralNames = {
 		null, null, null, null, null, null, null, null, null, null, null, null, 
-		null, null, null, null, null, "' '"
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, null, null, null, null, 
+		null, null, null, null, null, null, null, null, "' '"
 	};
 	private static readonly string[] _SymbolicNames = {
 		null, "YESTERDAY", "TODAY", "TOMORROW", "TONIGHT", "MORNING", "AFTERNOON", 
-		"EVENING", "DAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", 
-		"FRIDAY", "SATURDAY", "DIGIT", "WS"
+		"EVENING", "AM", "PM", "TIMEOFDAY", "LUNCH", "DINNER", "BREAKFAST", "BRUNCH", 
+		"DAY", "SUNDAY", "MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY", 
+		"SATURDAY", "DAYOFWEEK", "TO_BE", "WE", "YOU", "OUR", "US", "PRONOUN", 
+		"TO", "FROM", "IN", "ON", "AT", "OF", "WITH", "PREPOSITION", "THE", "FOR", 
+		"AND", "DIGIT", "STRING", "IDENTIFIER", "WS"
 	};
 	public static readonly IVocabulary DefaultVocabulary = new Vocabulary(_LiteralNames, _SymbolicNames);
 
@@ -98,6 +108,9 @@ public partial class Post_en_Parser : Parser {
 		_interp = new ParserATNSimulator(this,_ATN);
 	}
 	public partial class PostContext : ParserRuleContext {
+		public StatementContext statement() {
+			return GetRuleContext<StatementContext>(0);
+		}
 		public ITerminalNode Eof() { return GetToken(Post_en_Parser.Eof, 0); }
 		public PostContext(ParserRuleContext parent, int invokingState)
 			: base(parent, invokingState)
@@ -126,7 +139,411 @@ public partial class Post_en_Parser : Parser {
 		try {
 			EnterOuterAlt(_localctx, 1);
 			{
-			State = 2; Match(Eof);
+			State = 14; statement();
+			State = 15; Match(Eof);
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class StatementContext : ParserRuleContext {
+		public PhraseContext[] phrase() {
+			return GetRuleContexts<PhraseContext>();
+		}
+		public PhraseContext phrase(int i) {
+			return GetRuleContext<PhraseContext>(i);
+		}
+		public StatementContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_statement; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.EnterStatement(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.ExitStatement(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPost_en_ParserVisitor<TResult> typedVisitor = visitor as IPost_en_ParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitStatement(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public StatementContext statement() {
+		StatementContext _localctx = new StatementContext(_ctx, State);
+		EnterRule(_localctx, 2, RULE_statement);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 18;
+			_errHandler.Sync(this);
+			_la = _input.La(1);
+			do {
+				{
+				{
+				State = 17; phrase();
+				}
+				}
+				State = 20;
+				_errHandler.Sync(this);
+				_la = _input.La(1);
+			} while ( _la==DAYOFWEEK || _la==PRONOUN );
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class PhraseContext : ParserRuleContext {
+		public SubjectContext[] subject() {
+			return GetRuleContexts<SubjectContext>();
+		}
+		public SubjectContext subject(int i) {
+			return GetRuleContext<SubjectContext>(i);
+		}
+		public PredicateContext predicate() {
+			return GetRuleContext<PredicateContext>(0);
+		}
+		public ObjectContext @object() {
+			return GetRuleContext<ObjectContext>(0);
+		}
+		public PhraseContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_phrase; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.EnterPhrase(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.ExitPhrase(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPost_en_ParserVisitor<TResult> typedVisitor = visitor as IPost_en_ParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitPhrase(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public PhraseContext phrase() {
+		PhraseContext _localctx = new PhraseContext(_ctx, State);
+		EnterRule(_localctx, 4, RULE_phrase);
+		int _la;
+		try {
+			int _alt;
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 23;
+			_errHandler.Sync(this);
+			_alt = 1;
+			do {
+				switch (_alt) {
+				case 1:
+					{
+					{
+					State = 22; subject();
+					}
+					}
+					break;
+				default:
+					throw new NoViableAltException(this);
+				}
+				State = 25;
+				_errHandler.Sync(this);
+				_alt = Interpreter.AdaptivePredict(_input,1,_ctx);
+			} while ( _alt!=2 && _alt!=global::Antlr4.Runtime.Atn.ATN.InvalidAltNumber );
+			State = 28;
+			_la = _input.La(1);
+			if (_la==TO_BE) {
+				{
+				State = 27; predicate();
+				}
+			}
+
+			State = 31;
+			_la = _input.La(1);
+			if (_la==PREPOSITION) {
+				{
+				State = 30; @object();
+				}
+			}
+
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class SubjectContext : ParserRuleContext {
+		public ITerminalNode PRONOUN() { return GetToken(Post_en_Parser.PRONOUN, 0); }
+		public ITerminalNode DAYOFWEEK() { return GetToken(Post_en_Parser.DAYOFWEEK, 0); }
+		public SubjectContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_subject; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.EnterSubject(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.ExitSubject(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPost_en_ParserVisitor<TResult> typedVisitor = visitor as IPost_en_ParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitSubject(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public SubjectContext subject() {
+		SubjectContext _localctx = new SubjectContext(_ctx, State);
+		EnterRule(_localctx, 6, RULE_subject);
+		int _la;
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 33;
+			_la = _input.La(1);
+			if ( !(_la==DAYOFWEEK || _la==PRONOUN) ) {
+			_errHandler.RecoverInline(this);
+			} else {
+				Consume();
+			}
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class PredicateContext : ParserRuleContext {
+		public VerbContext verb() {
+			return GetRuleContext<VerbContext>(0);
+		}
+		public PredicateContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_predicate; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.EnterPredicate(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.ExitPredicate(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPost_en_ParserVisitor<TResult> typedVisitor = visitor as IPost_en_ParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitPredicate(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public PredicateContext predicate() {
+		PredicateContext _localctx = new PredicateContext(_ctx, State);
+		EnterRule(_localctx, 8, RULE_predicate);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 35; verb();
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class ObjectContext : ParserRuleContext {
+		public ObjectContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_object; } }
+	 
+		public ObjectContext() { }
+		public virtual void CopyFrom(ObjectContext context) {
+			base.CopyFrom(context);
+		}
+	}
+	public partial class DayOfWeekContext : ObjectContext {
+		public ITerminalNode PREPOSITION() { return GetToken(Post_en_Parser.PREPOSITION, 0); }
+		public ITerminalNode DAYOFWEEK() { return GetToken(Post_en_Parser.DAYOFWEEK, 0); }
+		public DayOfWeekContext(ObjectContext context) { CopyFrom(context); }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.EnterDayOfWeek(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.ExitDayOfWeek(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPost_en_ParserVisitor<TResult> typedVisitor = visitor as IPost_en_ParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitDayOfWeek(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class TimeOfDayContext : ObjectContext {
+		public ITerminalNode PREPOSITION() { return GetToken(Post_en_Parser.PREPOSITION, 0); }
+		public ITerminalNode TIMEOFDAY() { return GetToken(Post_en_Parser.TIMEOFDAY, 0); }
+		public TimeOfDayContext(ObjectContext context) { CopyFrom(context); }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.EnterTimeOfDay(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.ExitTimeOfDay(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPost_en_ParserVisitor<TResult> typedVisitor = visitor as IPost_en_ParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitTimeOfDay(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+	public partial class LocationLookupContext : ObjectContext {
+		public ITerminalNode PREPOSITION() { return GetToken(Post_en_Parser.PREPOSITION, 0); }
+		public ITerminalNode IDENTIFIER() { return GetToken(Post_en_Parser.IDENTIFIER, 0); }
+		public LocationLookupContext(ObjectContext context) { CopyFrom(context); }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.EnterLocationLookup(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.ExitLocationLookup(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPost_en_ParserVisitor<TResult> typedVisitor = visitor as IPost_en_ParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitLocationLookup(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public ObjectContext @object() {
+		ObjectContext _localctx = new ObjectContext(_ctx, State);
+		EnterRule(_localctx, 10, RULE_object);
+		try {
+			State = 43;
+			switch ( Interpreter.AdaptivePredict(_input,4,_ctx) ) {
+			case 1:
+				_localctx = new LocationLookupContext(_localctx);
+				EnterOuterAlt(_localctx, 1);
+				{
+				State = 37; Match(PREPOSITION);
+				State = 38; Match(IDENTIFIER);
+				}
+				break;
+
+			case 2:
+				_localctx = new DayOfWeekContext(_localctx);
+				EnterOuterAlt(_localctx, 2);
+				{
+				State = 39; Match(PREPOSITION);
+				State = 40; Match(DAYOFWEEK);
+				}
+				break;
+
+			case 3:
+				_localctx = new TimeOfDayContext(_localctx);
+				EnterOuterAlt(_localctx, 3);
+				{
+				State = 41; Match(PREPOSITION);
+				State = 42; Match(TIMEOFDAY);
+				}
+				break;
+			}
+		}
+		catch (RecognitionException re) {
+			_localctx.exception = re;
+			_errHandler.ReportError(this, re);
+			_errHandler.Recover(this, re);
+		}
+		finally {
+			ExitRule();
+		}
+		return _localctx;
+	}
+
+	public partial class VerbContext : ParserRuleContext {
+		public ITerminalNode TO_BE() { return GetToken(Post_en_Parser.TO_BE, 0); }
+		public VerbContext(ParserRuleContext parent, int invokingState)
+			: base(parent, invokingState)
+		{
+		}
+		public override int RuleIndex { get { return RULE_verb; } }
+		public override void EnterRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.EnterVerb(this);
+		}
+		public override void ExitRule(IParseTreeListener listener) {
+			IPost_en_ParserListener typedListener = listener as IPost_en_ParserListener;
+			if (typedListener != null) typedListener.ExitVerb(this);
+		}
+		public override TResult Accept<TResult>(IParseTreeVisitor<TResult> visitor) {
+			IPost_en_ParserVisitor<TResult> typedVisitor = visitor as IPost_en_ParserVisitor<TResult>;
+			if (typedVisitor != null) return typedVisitor.VisitVerb(this);
+			else return visitor.VisitChildren(this);
+		}
+	}
+
+	[RuleVersion(0)]
+	public VerbContext verb() {
+		VerbContext _localctx = new VerbContext(_ctx, State);
+		EnterRule(_localctx, 12, RULE_verb);
+		try {
+			EnterOuterAlt(_localctx, 1);
+			{
+			State = 45; Match(TO_BE);
 			}
 		}
 		catch (RecognitionException re) {
@@ -141,9 +558,24 @@ public partial class Post_en_Parser : Parser {
 	}
 
 	public static readonly string _serializedATN =
-		"\x3\xAF6F\x8320\x479D\xB75C\x4880\x1605\x191C\xAB37\x3\x13\a\x4\x2\t\x2"+
-		"\x3\x2\x3\x2\x3\x2\x2\x2\x2\x3\x2\x2\x2\x2\x5\x2\x4\x3\x2\x2\x2\x4\x5"+
-		"\a\x2\x2\x3\x5\x3\x3\x2\x2\x2\x2";
+		"\x3\xAF6F\x8320\x479D\xB75C\x4880\x1605\x191C\xAB37\x3.\x32\x4\x2\t\x2"+
+		"\x4\x3\t\x3\x4\x4\t\x4\x4\x5\t\x5\x4\x6\t\x6\x4\a\t\a\x4\b\t\b\x3\x2\x3"+
+		"\x2\x3\x2\x3\x3\x6\x3\x15\n\x3\r\x3\xE\x3\x16\x3\x4\x6\x4\x1A\n\x4\r\x4"+
+		"\xE\x4\x1B\x3\x4\x5\x4\x1F\n\x4\x3\x4\x5\x4\"\n\x4\x3\x5\x3\x5\x3\x6\x3"+
+		"\x6\x3\a\x3\a\x3\a\x3\a\x3\a\x3\a\x5\a.\n\a\x3\b\x3\b\x3\b\x2\x2\x2\t"+
+		"\x2\x2\x4\x2\x6\x2\b\x2\n\x2\f\x2\xE\x2\x2\x3\x4\x2\x19\x19\x1F\x1F\x30"+
+		"\x2\x10\x3\x2\x2\x2\x4\x14\x3\x2\x2\x2\x6\x19\x3\x2\x2\x2\b#\x3\x2\x2"+
+		"\x2\n%\x3\x2\x2\x2\f-\x3\x2\x2\x2\xE/\x3\x2\x2\x2\x10\x11\x5\x4\x3\x2"+
+		"\x11\x12\a\x2\x2\x3\x12\x3\x3\x2\x2\x2\x13\x15\x5\x6\x4\x2\x14\x13\x3"+
+		"\x2\x2\x2\x15\x16\x3\x2\x2\x2\x16\x14\x3\x2\x2\x2\x16\x17\x3\x2\x2\x2"+
+		"\x17\x5\x3\x2\x2\x2\x18\x1A\x5\b\x5\x2\x19\x18\x3\x2\x2\x2\x1A\x1B\x3"+
+		"\x2\x2\x2\x1B\x19\x3\x2\x2\x2\x1B\x1C\x3\x2\x2\x2\x1C\x1E\x3\x2\x2\x2"+
+		"\x1D\x1F\x5\n\x6\x2\x1E\x1D\x3\x2\x2\x2\x1E\x1F\x3\x2\x2\x2\x1F!\x3\x2"+
+		"\x2\x2 \"\x5\f\a\x2! \x3\x2\x2\x2!\"\x3\x2\x2\x2\"\a\x3\x2\x2\x2#$\t\x2"+
+		"\x2\x2$\t\x3\x2\x2\x2%&\x5\xE\b\x2&\v\x3\x2\x2\x2\'(\a\'\x2\x2(.\a-\x2"+
+		"\x2)*\a\'\x2\x2*.\a\x19\x2\x2+,\a\'\x2\x2,.\a\f\x2\x2-\'\x3\x2\x2\x2-"+
+		")\x3\x2\x2\x2-+\x3\x2\x2\x2.\r\x3\x2\x2\x2/\x30\a\x1A\x2\x2\x30\xF\x3"+
+		"\x2\x2\x2\a\x16\x1B\x1E!-";
 	public static readonly ATN _ATN =
 		new ATNDeserializer().Deserialize(_serializedATN.ToCharArray());
 }

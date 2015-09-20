@@ -18,6 +18,7 @@
 #pragma warning disable 1591
 
 namespace Mnx.Antlr.Grammars.Grammars.Post.en {
+#pragma warning disable 3021
 
 using Antlr4.Runtime.Misc;
 using IErrorNode = Antlr4.Runtime.Tree.IErrorNode;
@@ -34,6 +35,45 @@ using ParserRuleContext = Antlr4.Runtime.ParserRuleContext;
 [System.CLSCompliant(false)]
 public partial class Post_en_ParserBaseListener : IPost_en_ParserListener {
 	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.DayOfWeek"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterDayOfWeek([NotNull] Post_en_Parser.DayOfWeekContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.DayOfWeek"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitDayOfWeek([NotNull] Post_en_Parser.DayOfWeekContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.TimeOfDay"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterTimeOfDay([NotNull] Post_en_Parser.TimeOfDayContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.TimeOfDay"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitTimeOfDay([NotNull] Post_en_Parser.TimeOfDayContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.LocationLookup"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterLocationLookup([NotNull] Post_en_Parser.LocationLookupContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.LocationLookup"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitLocationLookup([NotNull] Post_en_Parser.LocationLookupContext context) { }
+
+	/// <summary>
 	/// Enter a parse tree produced by <see cref="Post_en_Parser.post"/>.
 	/// <para>The default implementation does nothing.</para>
 	/// </summary>
@@ -45,6 +85,84 @@ public partial class Post_en_ParserBaseListener : IPost_en_ParserListener {
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	public virtual void ExitPost([NotNull] Post_en_Parser.PostContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.statement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterStatement([NotNull] Post_en_Parser.StatementContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.statement"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitStatement([NotNull] Post_en_Parser.StatementContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.phrase"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterPhrase([NotNull] Post_en_Parser.PhraseContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.phrase"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitPhrase([NotNull] Post_en_Parser.PhraseContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.subject"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterSubject([NotNull] Post_en_Parser.SubjectContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.subject"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitSubject([NotNull] Post_en_Parser.SubjectContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.predicate"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterPredicate([NotNull] Post_en_Parser.PredicateContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.predicate"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitPredicate([NotNull] Post_en_Parser.PredicateContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.@object"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterObject([NotNull] Post_en_Parser.ObjectContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.@object"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitObject([NotNull] Post_en_Parser.ObjectContext context) { }
+
+	/// <summary>
+	/// Enter a parse tree produced by <see cref="Post_en_Parser.verb"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void EnterVerb([NotNull] Post_en_Parser.VerbContext context) { }
+	/// <summary>
+	/// Exit a parse tree produced by <see cref="Post_en_Parser.verb"/>.
+	/// <para>The default implementation does nothing.</para>
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	public virtual void ExitVerb([NotNull] Post_en_Parser.VerbContext context) { }
 
 	/// <inheritdoc/>
 	/// <remarks>The default implementation does nothing.</remarks>

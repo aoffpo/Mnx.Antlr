@@ -51,24 +51,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Post_en_Lexer.cs">
-      <Link>LinkedFiles\Post\Post_en_Lexer.cs</Link>
-    </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Post_en_Parser.cs">
-      <Link>LinkedFiles\Post\Post_en_Parser.cs</Link>
-    </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Post_en_ParserBaseListener.cs">
-      <Link>LinkedFiles\Post\Post_en_ParserBaseListener.cs</Link>
-    </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Post_en_ParserBaseVisitor.cs">
-      <Link>LinkedFiles\Post\Post_en_ParserBaseVisitor.cs</Link>
-    </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Post_en_ParserListener.cs">
-      <Link>LinkedFiles\Post\Post_en_ParserListener.cs</Link>
-    </Compile>
-    <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Post_en_ParserVisitor.cs">
-      <Link>LinkedFiles\Post\Post_en_ParserVisitor.cs</Link>
-    </Compile>
     <Compile Include="..\Mnx.Antlr.Grammars\obj\Debug\Sql_reducedLexer.cs">
       <Link>LinkedFiles\Sql_reducedLexer.cs</Link>
     </Compile>
@@ -89,7 +71,6 @@
     </Compile>
     <Compile Include="Classes\CssBuilder.cs" />
     <Compile Include="Classes\TypeResolver.cs" />
-    <Compile Include="Listeners\PostListener.cs" />
     <Compile Include="Listeners\SqlReducedListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -100,10 +81,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="DSI.BusinessAsset.sql">
+    <Content Include="Create_Insert.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="DSI.WorkOrder.sql">
+    <Content Include="Insert_Select.sql">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

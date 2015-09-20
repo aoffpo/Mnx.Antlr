@@ -18,6 +18,7 @@
 #pragma warning disable 1591
 
 namespace Mnx.Antlr.Grammars.Grammars.Post.en {
+#pragma warning disable 3021
 using Antlr4.Runtime.Misc;
 using Antlr4.Runtime.Tree;
 using IToken = Antlr4.Runtime.IToken;
@@ -31,10 +32,76 @@ using IToken = Antlr4.Runtime.IToken;
 [System.CLSCompliant(false)]
 public interface IPost_en_ParserVisitor<Result> : IParseTreeVisitor<Result> {
 	/// <summary>
+	/// Visit a parse tree produced by the <c>DayOfWeek</c>
+	/// labeled alternative in <see cref="Post_en_Parser.object"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitDayOfWeek([NotNull] Post_en_Parser.DayOfWeekContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by the <c>TimeOfDay</c>
+	/// labeled alternative in <see cref="Post_en_Parser.object"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitTimeOfDay([NotNull] Post_en_Parser.TimeOfDayContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by the <c>LocationLookup</c>
+	/// labeled alternative in <see cref="Post_en_Parser.object"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitLocationLookup([NotNull] Post_en_Parser.LocationLookupContext context);
+
+	/// <summary>
 	/// Visit a parse tree produced by <see cref="Post_en_Parser.post"/>.
 	/// </summary>
 	/// <param name="context">The parse tree.</param>
 	/// <return>The visitor result.</return>
 	Result VisitPost([NotNull] Post_en_Parser.PostContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Post_en_Parser.statement"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitStatement([NotNull] Post_en_Parser.StatementContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Post_en_Parser.phrase"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPhrase([NotNull] Post_en_Parser.PhraseContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Post_en_Parser.subject"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitSubject([NotNull] Post_en_Parser.SubjectContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Post_en_Parser.predicate"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitPredicate([NotNull] Post_en_Parser.PredicateContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Post_en_Parser.object"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitObject([NotNull] Post_en_Parser.ObjectContext context);
+
+	/// <summary>
+	/// Visit a parse tree produced by <see cref="Post_en_Parser.verb"/>.
+	/// </summary>
+	/// <param name="context">The parse tree.</param>
+	/// <return>The visitor result.</return>
+	Result VisitVerb([NotNull] Post_en_Parser.VerbContext context);
 }
 } // namespace Mnx.Antlr.Grammars.Grammars.Post.en
