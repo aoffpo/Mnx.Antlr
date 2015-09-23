@@ -50,6 +50,7 @@
     <Compile Include="Grammar\CronLexer.g4.cs" />
     <Compile Include="Grammar\CronParser.g4.cs" />
     <Compile Include="Listeners\CronListener.cs" />
+    <Compile Include="Listeners\Partials\CronListener.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
