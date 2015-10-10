@@ -1,34 +1,21 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Web.UI;
+using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
-using Mnx.Antlr.Console.Classes;
 using Mnx.Antlr.Grammars.SqlReduced;
 
 namespace Mnx.Antlr.Console.Listeners
 {
-    public class SqlReducedListener : ISql_reducedParserListener
+    public class SqlToPocoListener : ISql_reducedParserListener
     {
-        private HtmlTextWriter _writer;
-        private CssBuilder _styles;
-        private Dictionary<string, string> _typeLookup;
-        private List<string> _notnullLookup; 
-
-        public SqlReducedListener(CssBuilder styles, HtmlTextWriter writer)
-        {
-            _writer = writer;
-            _styles = styles;
-            _typeLookup = new Dictionary<string, string>();
-            _notnullLookup = new List<string>();
-        }
-
-        //public SqlReducedListener(Stream filestream)
-        //{
-        //    var inputStream = new AntlrInputStream(filestream);
-        //    var lexer = new Sql_reducedLexer(inputStream);
-        //}
+        private string _objectType;
+        private string _collectionType;
+        private StringBuilder _result = new StringBuilder();
+        public string Result { get { return _result.ToString(); } }
+        private Dictionary<string, string> _typeLookup = new Dictionary<string, string>();
 
         public void VisitTerminal(ITerminalNode node)
         {
@@ -57,7 +44,7 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitProg(Sql_reducedParser.ProgContext context)
         {
-            
+            _result.Append(");");
         }
 
         public void EnterBatch(Sql_reducedParser.BatchContext context)
@@ -97,7 +84,7 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitSelectStatement(Sql_reducedParser.SelectStatementContext context)
         {
-          //  System.Console.WriteLine(context.GetText());
+            
         }
 
         public void EnterSelectQuery(Sql_reducedParser.SelectQueryContext context)
@@ -192,49 +179,26 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void EnterCreateTableStatement(Sql_reducedParser.CreateTableStatementContext context)
         {
-            _writer.RenderBeginTag(HtmlTextWriterTag.Head);
-            _writer.AddAttribute(HtmlTextWriterAttribute.Type, "text/css");
-            _writer.RenderBeginTag(HtmlTextWriterTag.Style);
             
         }
 
         public void ExitCreateTableStatement(Sql_reducedParser.CreateTableStatementContext context)
         {
-            _writer.Write(_styles.Styles);
-            _writer.RenderEndTag();            
-            _writer.RenderEndTag();
-            //create css for table definition
-            //add content style for "NULL" conten when in non-null style
-            
+
         }
+        
 
         public void EnterColumnDescription(Sql_reducedParser.ColumnDescriptionContext context)
         {
-           // System.Console.WriteLine("Enter" + context.columnName());
+            
         }
 
         public void ExitColumnDescription(Sql_reducedParser.ColumnDescriptionContext context)
         {
-            var constraint = context.columnConstraint();
-            var columnName = context.columnName().GetText().Replace("[","").Replace("]","");
-            var dataType =  context.datatype().GetText().ToLower();
-            var nullable = context.NOT()== null;
+            var columnName = context.columnName().GetText().Replace("[", "").Replace("]", "");
+            var dataType = context.datatype().GetText().ToLower();
+           
             _typeLookup.Add(columnName, dataType);
-            if (!nullable) _notnullLookup.Add(columnName);
-
-            columnName = "#" +columnName;
-            dataType = "." + dataType;
-            //identity style
-            _styles.CreateSelector(columnName);
-            var value = constraint != null ? "yellow" : "white";
-            _styles.AddProperty(columnName, "background-color", value);
-
-            //datatype style
-            _styles.CreateSelector(dataType);
-            value = dataType == ".int" ? "blue" : "white";
-            _styles.AddProperty(dataType, "background-color", value);
-            
-
         }
 
         public void EnterSetStatement(Sql_reducedParser.SetStatementContext context)
@@ -279,48 +243,43 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void EnterInsertStatement(Sql_reducedParser.InsertStatementContext context)
         {
-           _writer.RenderBeginTag(HtmlTextWriterTag.Body);
-            _writer.RenderBeginTag(HtmlTextWriterTag.Table);
-            _writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+            
+            
         }
 
         public void ExitInsertStatement(Sql_reducedParser.InsertStatementContext context)
         {
-            //setup table
-            _writer.RenderEndTag();//table
-            _writer.RenderEndTag();//body
+
         }
 
         public void EnterInsertColumnSpec(Sql_reducedParser.InsertColumnSpecContext context)
         {
-           
+
         }
 
         public void ExitInsertColumnSpec(Sql_reducedParser.InsertColumnSpecContext context)
         {
-            
+           
         }
 
         public void EnterInsertSelectSpec(Sql_reducedParser.InsertSelectSpecContext context)
         {
-            
+           
         }
 
         public void ExitInsertSelectSpec(Sql_reducedParser.InsertSelectSpecContext context)
         {
-            //create table cell
-            
-            //set css classes
-            //insert value
-
+           
         }
 
         public void EnterInsertSelectSpecItem(Sql_reducedParser.InsertSelectSpecItemContext context)
         {
+            _result.AppendFormat("new {0}() {{ ", _objectType);
         }
 
         public void ExitInsertSelectSpecItem(Sql_reducedParser.InsertSelectSpecItemContext context)
         {
+           
         }
 
         public void EnterAliasedSetValue(Sql_reducedParser.AliasedSetValueContext context)
@@ -330,29 +289,33 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitAliasedSetValue(Sql_reducedParser.AliasedSetValueContext context)
         {
-            //if (context.objectName() == null) return;
-            var value = context.LITERAL() == null ? "" : context.LITERAL().GetText();
-            //context.columnItemList().
+            var value = context.LITERAL() == null ? "null" : context.LITERAL().GetText();
 
             var columnName = context.columnName().GetText();
-            columnName = columnName.Replace("[", "");
-            columnName = columnName.Replace("]", "");
-            value = value.Replace("N'", "");
-            value = value.Replace("'", "");
+            columnName = columnName.Replace("[", "")
+                .Replace("]", "")
+                .Replace("_ID", "Id")
+                .Replace("_", "");
+            value = value.Replace("N'", "").
+                Replace("'", "");
             var datatype = "";
             _typeLookup.TryGetValue(columnName, out datatype);
+            if (datatype != null)
+            {
+                if (datatype.Contains("date"))
+                {
 
-            //map columns to css created in CREATE Table
-            //find datatype info in dictionary, check value against data type and add .typemismatch if mismatched
-            var isResolved = TypeResolver.Resolve(datatype, value);
-            //check if column not nullable; add .notnullable if NULL
-            var notnull = _notnullLookup.Any(n => n == columnName);
-            if (notnull && value.ToUpper() == "")
-                _writer.AddAttribute(HtmlTextWriterAttribute.Class, "notnullable");
-            else _writer.AddAttribute(HtmlTextWriterAttribute.Class, isResolved ? columnName : "typemismatch");
-            _writer.RenderBeginTag(HtmlTextWriterTag.Td);         
-            _writer.Write(value);
-            _writer.RenderEndTag();
+                    value = String.Format("DateTime.Parse(\"{0}\");", value);
+                }
+                else if (datatype.Contains("char"))
+                {
+                    value = @"""" + value + @"""";
+                }
+
+            }
+            _result.AppendFormat("{0} = {1},",columnName, value);
+
+
         }
 
         public void EnterColumnConstraint(Sql_reducedParser.ColumnConstraintContext context)
@@ -417,12 +380,12 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void EnterUnionAll(Sql_reducedParser.UnionAllContext context)
         {
-            _writer.RenderEndTag();
+            
         }
 
         public void ExitUnionAll(Sql_reducedParser.UnionAllContext context)
         {
-            _writer.RenderBeginTag(HtmlTextWriterTag.Tr);
+            _result.AppendLine("},");  
         }
 
         public void EnterToggle(Sql_reducedParser.ToggleContext context)
@@ -482,7 +445,14 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitTempTableName(Sql_reducedParser.TempTableNameContext context)
         {
-            
+            if (_objectType == null)
+            {
+                _objectType = context.tableName().GetText();
+                _collectionType = _objectType + "s";
+
+                var addOrUpdateStatement = String.Format("context.{0}.AddOrUpdate(x => x.Id,", _collectionType);
+                _result.AppendLine(addOrUpdateStatement);
+            }
         }
 
         public void EnterDatabaseName(Sql_reducedParser.DatabaseNameContext context)

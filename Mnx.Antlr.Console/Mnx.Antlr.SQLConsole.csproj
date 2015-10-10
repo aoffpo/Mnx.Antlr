@@ -72,9 +72,9 @@
     <Compile Include="Classes\CssBuilder.cs" />
     <Compile Include="Classes\TypeResolver.cs" />
     <Compile Include="Listeners\SqlReducedListener.cs" />
+    <Compile Include="Listeners\SqlToPocoListener.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Visitors\SqlReducedVisitor.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />

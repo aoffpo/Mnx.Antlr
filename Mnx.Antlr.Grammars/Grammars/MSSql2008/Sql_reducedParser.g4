@@ -116,7 +116,8 @@ setValue : toggle ;
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
 insertStatement : insertColumnSpec insertSelectSpec ;
 insertColumnSpec : INSERT (tempTableName | objectName) LPAREN columnItemList RPAREN ;
-insertSelectSpec : ( SELECT (aliasedSetValue)+ unionAll )+ ;
+insertSelectSpec : ( insertSelectSpecItem )+ ;
+insertSelectSpecItem : SELECT (aliasedSetValue)+ unionAll ;
 aliasedSetValue : COMMA? (LITERAL | NULL)  AS columnName ;
 
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
