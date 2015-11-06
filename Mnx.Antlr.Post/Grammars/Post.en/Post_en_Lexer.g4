@@ -41,9 +41,34 @@ DAYOFWEEK
 	: SUNDAY | MONDAY | TUESDAY | WEDNESDAY | THURSDAY | FRIDAY | SATURDAY
 	;
 //--------------------------------------
-//VERBS  
+//AUX VERBS  
 //--------------------------------------
-TO_BE: B E | I S ;
+TO_BE: B E 
+	| A M
+	| A R E 
+	| I S 
+	| W I L L B E //figure out helper verbs (future tense)
+	;
+TO_HAVE : H A S
+	| H A V E  
+	;
+AUX_VERB : 
+	TO_BE
+	| TO_HAVE
+	;
+//--------------------------------------
+// TRANSITIVE VERBS
+//--------------------------------------
+CATCH : C A T C H ;
+FIND : F I N D ;
+
+TRANSITIVE_VERB : CATCH
+	| FIND
+	;
+//--------------------------------------
+// 
+//--------------------------------------
+
 //-------------------------------------- 
 //PRONOUNS  
 //--------------------------------------
