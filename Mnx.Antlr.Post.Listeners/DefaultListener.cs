@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
 using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
@@ -11,16 +12,15 @@ namespace Mnx.Antlr.Post.Listeners
 {
     public class DefaultListener : IPost_en_ParserListener
     {
-        
-        public PostData Data { get; private set; }
-
-        //class PostEvent
+        const string SPACE =" ";
         //private DateTime dateTime;
         private string _address;
         //private string identifier;
         //private bool repeating;
         //private string hyperlink;
         //
+        public PostData Data { get; private set; }
+
         public void EnterPost(Post_en_Parser.PostContext context)
         {
             Data = new PostData();
@@ -140,14 +140,18 @@ namespace Mnx.Antlr.Post.Listeners
 
         public void ExitStreet_address(Post_en_Parser.Street_addressContext context)
         {
-            string numberText = String.Empty
-             ,streetText = String.Empty
-             ,streetdesignatorText = String.Empty
-             ,cityText = String.Empty;
+
+            var numberText = string.Empty;
+            var streetText = string.Empty;
             var number = context.DIGIT();
             var street = context.IDENTIFIER();
             var streetdesignator = context.STREETDESIGNATOR() ?? context.STREETDESIGNATORLONG();
             var city = context.CITY();//validate with db or db derived corpus
+
+            numberText = number.Aggregate(numberText, (current, item) => string.Concat(current, item.GetText()));
+            streetText = street.Aggregate(streetText, (current, item) => string.Concat(current, SPACE, item.GetText()));
+            var streetdesignatorText = streetdesignator.GetText();
+            var cityText = city.GetText();
 
             var result = new StringBuilder();
             result.Append(numberText)
@@ -155,6 +159,8 @@ namespace Mnx.Antlr.Post.Listeners
                 .Append(streetdesignatorText)
                 .Append(cityText);
             _address = result.ToString();
+            //or is it just this?
+            //_address = context.GetText();
         }
 
         public void EnterDigits(Post_en_Parser.DigitsContext context)

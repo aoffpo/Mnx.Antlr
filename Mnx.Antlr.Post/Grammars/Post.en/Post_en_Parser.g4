@@ -36,7 +36,7 @@ auxiliary_verb_phrase
 transitive_verb_phrase
 	: TRANSITIVE_VERB PRONOUN //begin island to capture location
 	;
-street_address : DIGIT+ IDENTIFIER+ COMMA? (STREETDESIGNATOR PERIOD? | STREETDESIGNATORLONG) (COMMA CITY)? ;
+street_address : DIGIT+ IDENTIFIER+ COMMA? (STREETDESIGNATOR PERIOD? | STREETDESIGNATORLONG) (COMMA | IN)? CITY? ;
 //time_range
 // : date_time
 // | date
