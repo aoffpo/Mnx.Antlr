@@ -1,6 +1,6 @@
-﻿using System.Diagnostics;
-using System.Runtime.CompilerServices;
-using System.Xml.Schema;
+﻿using System;
+using System.Diagnostics;
+using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Mnx.Antlr.Post.Grammars;
@@ -11,17 +11,33 @@ namespace Mnx.Antlr.Post.Listeners
 {
     public class DefaultListener : IPost_en_ParserListener
     {
+        
         public PostData Data { get; private set; }
 
         //class PostEvent
-        //clear on Enter?? to support multiple events per post
         //private DateTime dateTime;
-        //private string address;
+        private string _address;
         //private string identifier;
         //private bool repeating;
         //private string hyperlink;
         //
+        public void EnterPost(Post_en_Parser.PostContext context)
+        {
+            Data = new PostData();
+            
+        }
+        public void EnterPhrase(Post_en_Parser.PhraseContext context)
+        {
+            _address = String.Empty; //done here to support multiple phrases per statement
+        }
 
+        public void ExitPhrase(Post_en_Parser.PhraseContext context)
+        {
+            Data.Location = new Location
+            {
+                Address = _address
+            };
+        }
         public void VisitTerminal(ITerminalNode node)
         {
 
@@ -42,9 +58,36 @@ namespace Mnx.Antlr.Post.Listeners
 
         }
 
-        public void EnterPost(Post_en_Parser.PostContext context)
+        public void EnterPhraseWithLocationLookup(Post_en_Parser.PhraseWithLocationLookupContext context)
         {
-            Data = new PostData();
+        }
+
+        public void ExitPhraseWithLocationLookup(Post_en_Parser.PhraseWithLocationLookupContext context)
+        {
+        }
+
+        public void EnterPhraseWithDayOfWeek(Post_en_Parser.PhraseWithDayOfWeekContext context)
+        {
+        }
+
+        public void ExitPhraseWithDayOfWeek(Post_en_Parser.PhraseWithDayOfWeekContext context)
+        {
+        }
+
+        public void EnterPhraseWithAddress(Post_en_Parser.PhraseWithAddressContext context)
+        {
+        }
+
+        public void ExitPhraseWithAddress(Post_en_Parser.PhraseWithAddressContext context)
+        {
+        }
+
+        public void EnterPhraseWithTimeOfDay(Post_en_Parser.PhraseWithTimeOfDayContext context)
+        {
+        }
+
+        public void ExitPhraseWithTimeOfDay(Post_en_Parser.PhraseWithTimeOfDayContext context)
+        {
         }
 
         public void ExitPost(Post_en_Parser.PostContext context)
@@ -54,35 +97,6 @@ namespace Mnx.Antlr.Post.Listeners
             Debug.WriteLine("Valid Data: " + result.IsValid);
         }
 
-        public void EnterDayOfWeek(Post_en_Parser.DayOfWeekContext context)
-        {
-
-        }
-
-        public void ExitDayOfWeek(Post_en_Parser.DayOfWeekContext context)
-        {
-
-        }
-
-        public void EnterTimeOfDay(Post_en_Parser.TimeOfDayContext context)
-        {
-
-        }
-
-        public void ExitTimeOfDay(Post_en_Parser.TimeOfDayContext context)
-        {
-
-        }
-
-        public void EnterLocationLookup(Post_en_Parser.LocationLookupContext context)
-        {
-
-        }
-
-        public void ExitLocationLookup(Post_en_Parser.LocationLookupContext context)
-        {
-
-        }
 
         public void EnterStatement(Post_en_Parser.StatementContext context)
         {
@@ -90,16 +104,6 @@ namespace Mnx.Antlr.Post.Listeners
         }
 
         public void ExitStatement(Post_en_Parser.StatementContext context)
-        {
-
-        }
-
-        public void EnterPhrase(Post_en_Parser.PhraseContext context)
-        {
-
-        }
-
-        public void ExitPhrase(Post_en_Parser.PhraseContext context)
         {
 
         }
@@ -130,11 +134,42 @@ namespace Mnx.Antlr.Post.Listeners
         {
         }
 
+        public void EnterStreet_address(Post_en_Parser.Street_addressContext context)
+        {
+        }
+
+        public void ExitStreet_address(Post_en_Parser.Street_addressContext context)
+        {
+            string numberText = String.Empty
+             ,streetText = String.Empty
+             ,streetdesignatorText = String.Empty
+             ,cityText = String.Empty;
+            var number = context.DIGIT();
+            var street = context.IDENTIFIER();
+            var streetdesignator = context.STREETDESIGNATOR() ?? context.STREETDESIGNATORLONG();
+            var city = context.CITY();//validate with db or db derived corpus
+
+            var result = new StringBuilder();
+            result.Append(numberText)
+                .Append(streetText)
+                .Append(streetdesignatorText)
+                .Append(cityText);
+            _address = result.ToString();
+        }
+
         public void EnterDigits(Post_en_Parser.DigitsContext context)
         {
         }
 
         public void ExitDigits(Post_en_Parser.DigitsContext context)
+        {
+        }
+
+        public void EnterUnknowns(Post_en_Parser.UnknownsContext context)
+        {
+        }
+
+        public void ExitUnknowns(Post_en_Parser.UnknownsContext context)
         {
         }
     }

@@ -28,13 +28,15 @@ subject
 //    ;
 
 auxiliary_verb_phrase
-	: PRONOUN AUX_VERB PREPOSITION IDENTIFIER  # LocationLookup
-	| PRONOUN AUX_VERB ON DAYOFWEEK # DayOfWeek
-	| PRONOUN AUX_VERB IDENTIFIER TIMEOFDAY # TimeOfDay
+	: (PRONOUN | MEAL) AUX_VERB PREPOSITION street_address  # PhraseWithAddress
+	| (PRONOUN | MEAL) AUX_VERB PREPOSITION IDENTIFIER  # PhraseWithLocationLookup
+	| PRONOUN AUX_VERB ON DAYOFWEEK # PhraseWithDayOfWeek
+	| PRONOUN AUX_VERB IDENTIFIER TIMEOFDAY # PhraseWithTimeOfDay
 	;
 transitive_verb_phrase
-	: TRANSITIVE_VERB PRONOUN //begin island to capture location or identifier
+	: TRANSITIVE_VERB PRONOUN //begin island to capture location
 	;
+street_address : DIGIT+ IDENTIFIER+ COMMA? (STREETDESIGNATOR PERIOD? | STREETDESIGNATORLONG) (COMMA CITY)? ;
 //time_range
 // : date_time
 // | date
@@ -42,3 +44,4 @@ transitive_verb_phrase
  digits
  : DIGIT DIGIT?
  ;
+ unknowns : UNKNOWN+ ; 
