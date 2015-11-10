@@ -24,14 +24,7 @@ TIMEOFDAY
 LUNCH : L U N C H ;
 DINNER : D I N N E R ;  
 BREAKFAST : B R E A K F A S T ; 
-BRUNCH: B R U N C H ;
-MEAL 
-	: LUNCH
-	| DINNER  
-	| BREAKFAST  
-	| BRUNCH
-	;
-
+//BRUNCH : B R U N C H ;
 //--------------------------------------
 //Days of the week
 //--------------------------------------
@@ -58,10 +51,7 @@ TO_BE: B E
 TO_HAVE : H A S
 	| H A V E  
 	;
-AUX_VERB : 
-	TO_BE
-	| TO_HAVE
-	;
+
 //--------------------------------------
 // TRANSITIVE VERBS
 //--------------------------------------
@@ -82,7 +72,7 @@ WE : W E ;
 YOU : Y O U ;
 OUR : O U R ;
 US : U S ;
-PRONOUN : WE | YOU | OUR | US ;
+
 //--------------------------------------
 //PREPOSITIONS  
 //--------------------------------------
@@ -93,7 +83,6 @@ ON : O N ;
 AT : A T | '@';
 OF : O F ;
 WITH : W I T H ;
-PREPOSITION : TO | FROM | IN | ON | AT | OF | WITH ;
 //--------------------------------------
 //Common Words
 //--------------------------------------
@@ -104,19 +93,17 @@ AND : A N D ;
 //--------------------------------------
 //Addresses
 //--------------------------------------
-CITY : STRING ;
+
 //--------------------------------------
 COMMA : ',' ;
 PERIOD: '.' ;
 DIGIT : [0-9] ;
-STRING
-    :   '"' ( ESC | ~[\\"] )*? '"'
-    |   '\'' ( ESC | ~[\\'] )*? '\''
+
+IDENTIFIER 
+    : ('a'..'z' | 'A'..'Z'|'@'|'#')('a'..'z' | 'A'..'Z'|'@'|'#')*
     ;
-IDENTIFIER : '@'? STRING
-	;
 WS
-	:	' ' -> channel(HIDDEN)
+	: ' ' -> channel(HIDDEN)
 	;
 
 fragment

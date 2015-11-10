@@ -14,10 +14,6 @@ phrase
 	: auxiliary_verb_phrase
 	| transitive_verb_phrase
 	;
-subject
-    : PRONOUN
-	| DAYOFWEEK
-    ;
 //predicate
 //    : verb
 //    ;
@@ -28,20 +24,27 @@ subject
 //    ;
 
 auxiliary_verb_phrase
-	: (PRONOUN | MEAL) AUX_VERB PREPOSITION street_address  # PhraseWithAddress
-	| (PRONOUN | MEAL) AUX_VERB PREPOSITION IDENTIFIER  # PhraseWithLocationLookup
-	| PRONOUN AUX_VERB ON DAYOFWEEK # PhraseWithDayOfWeek
-	| PRONOUN AUX_VERB IDENTIFIER TIMEOFDAY # PhraseWithTimeOfDay
+	: (pronoun | meal) aux_verb preposition street_address  # PhraseWithAddress
+	| (pronoun | meal) aux_verb preposition IDENTIFIER  # PhraseWithLocationLookup
+	| pronoun aux_verb ON DAYOFWEEK # PhraseWithDayOfWeek
+	| pronoun aux_verb IDENTIFIER TIMEOFDAY # PhraseWithTimeOfDay
 	;
 transitive_verb_phrase
-	: TRANSITIVE_VERB PRONOUN //begin island to capture location
+	: TRANSITIVE_VERB pronoun //begin island to capture location
 	;
-street_address : DIGIT+ IDENTIFIER+ COMMA? (STREETDESIGNATOR PERIOD? | STREETDESIGNATORLONG) (COMMA | IN)? CITY? ;
+street_address : digits street_name preposition? city ;
 //time_range
 // : date_time
 // | date
 // ;
- digits
- : DIGIT DIGIT?
+pronoun : WE | YOU | OUR | US ;
+aux_verb : TO_BE | TO_HAVE ; 
+preposition : COMMA | TO | FROM | IN | ON | AT | OF | WITH ;
+meal : LUNCH | DINNER | BREAKFAST ;
+
+street_name : IDENTIFIER+ (STREETDESIGNATOR PERIOD? | STREETDESIGNATORLONG)?;
+city : IDENTIFIER+ ;
+digits
+ : DIGIT DIGIT*
  ;
  unknowns : UNKNOWN+ ; 

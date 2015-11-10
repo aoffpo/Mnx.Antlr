@@ -108,16 +108,6 @@ namespace Mnx.Antlr.Post.Listeners
 
         }
 
-        public void EnterSubject(Post_en_Parser.SubjectContext context)
-        {
-
-        }
-
-        public void ExitSubject(Post_en_Parser.SubjectContext context)
-        {
-
-        }
-
         public void EnterAuxiliary_verb_phrase(Post_en_Parser.Auxiliary_verb_phraseContext context)
         {
         }
@@ -139,28 +129,71 @@ namespace Mnx.Antlr.Post.Listeners
         }
 
         public void ExitStreet_address(Post_en_Parser.Street_addressContext context)
-        {
+        {          
+            var number = context.digits();
+            var street = context.street_name();
+            var city = context.city();//validate with db or db derived corpus
 
-            var numberText = string.Empty;
-            var streetText = string.Empty;
-            var number = context.DIGIT();
-            var street = context.IDENTIFIER();
-            var streetdesignator = context.STREETDESIGNATOR() ?? context.STREETDESIGNATORLONG();
-            var city = context.CITY();//validate with db or db derived corpus
-
-            numberText = number.Aggregate(numberText, (current, item) => string.Concat(current, item.GetText()));
-            streetText = street.Aggregate(streetText, (current, item) => string.Concat(current, SPACE, item.GetText()));
-            var streetdesignatorText = streetdesignator.GetText();
+            var streetText = street.GetText();
+            
             var cityText = city.GetText();
+            var numberText = number.GetText();
 
             var result = new StringBuilder();
             result.Append(numberText)
                 .Append(streetText)
-                .Append(streetdesignatorText)
                 .Append(cityText);
             _address = result.ToString();
             //or is it just this?
             //_address = context.GetText();
+        }
+
+        public void EnterPronoun(Post_en_Parser.PronounContext context)
+        {
+        }
+
+        public void ExitPronoun(Post_en_Parser.PronounContext context)
+        {
+        }
+
+        public void EnterAux_verb(Post_en_Parser.Aux_verbContext context)
+        {
+        }
+
+        public void ExitAux_verb(Post_en_Parser.Aux_verbContext context)
+        {
+        }
+
+        public void EnterPreposition(Post_en_Parser.PrepositionContext context)
+        {
+        }
+
+        public void ExitPreposition(Post_en_Parser.PrepositionContext context)
+        {
+        }
+
+        public void EnterMeal(Post_en_Parser.MealContext context)
+        {
+        }
+
+        public void ExitMeal(Post_en_Parser.MealContext context)
+        {
+        }
+
+        public void EnterStreet_name(Post_en_Parser.Street_nameContext context)
+        {
+        }
+
+        public void ExitStreet_name(Post_en_Parser.Street_nameContext context)
+        {
+        }
+
+        public void EnterCity(Post_en_Parser.CityContext context)
+        {
+        }
+
+        public void ExitCity(Post_en_Parser.CityContext context)
+        {
         }
 
         public void EnterDigits(Post_en_Parser.DigitsContext context)

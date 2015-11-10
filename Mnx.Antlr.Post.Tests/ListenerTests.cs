@@ -34,6 +34,15 @@ namespace Mnx.Antlr.Post.Tests
             }
             _parser.statement();
         }
+
+        [Test]
+        public void SimpleTest_Address()
+        {
+            //We are at 214 Hunt St in Durham
+            var data = "We are at 214 Hunt St in Durham";
+            Parse(data);
+            Assert.AreEqual(_listener.Data.Location.Address, data);
+        }
         [Test]
         public void TestDateFormatA()
         {
