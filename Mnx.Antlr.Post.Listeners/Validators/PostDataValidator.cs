@@ -1,4 +1,5 @@
-﻿using FluentValidation;
+﻿using System;
+using FluentValidation;
 using Mnx.Antlr.Post.Listeners.Models;
 
 namespace Mnx.Antlr.Post.Listeners.Validators
@@ -8,7 +9,9 @@ namespace Mnx.Antlr.Post.Listeners.Validators
         public PostDataValidator()
         {
             RuleFor(pd => pd.StartDate)
-                .NotNull();
+                .Must(sd=>sd != DateTime.MinValue).WithMessage("StartDate is Min Date")
+                .NotNull().WithMessage("StartDate is null");
+          
         }
     }
 }

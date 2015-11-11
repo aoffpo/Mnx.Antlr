@@ -8,7 +8,7 @@ using Mnx.Antlr.Post.Listeners.Models;
 namespace Mnx.Antlr.Post.Tests
 {
     [TestFixture]
-    public class ListenerTests
+    public class ListenerTests : TestBase
     { 
         readonly DateTime[] _dates = new DateTime[2];
        // DateTime _now = new DateTime(2014, 5, 5, 12, 0, 0);
@@ -32,21 +32,28 @@ namespace Mnx.Antlr.Post.Tests
             {
                 _parser.AddParseListener(_listener);
             }
-            _parser.statement();
+            _parser.post();
         }
 
         [Test]
         public void SimpleTest_Address()
         {
-            //We are at 214 Hunt St in Durham
+            //XXX START HERE XXX//
             var data = "We are at 214 Hunt St in Durham";
+            var expected =
+                new Location()
+                {
+                    Address = "214 Hunt St",
+                    City = "Durham",
+                    Region = String.Empty,
+                };
             Parse(data);
-            Assert.AreEqual(_listener.Data.Location.Address, data);
+            AssertLocationsAreEqual(expected, _listener.Data.Location);
         }
         [Test]
         public void TestDateFormatA()
         {
-            //XXX START HERE XXX//
+            
             string data = "Lunch is at 3000 Centre Green Way, Cary. Serving from 11:30-1:30 today!";
             Parse(data);
             var date1 = _listener.Data.StartDate;

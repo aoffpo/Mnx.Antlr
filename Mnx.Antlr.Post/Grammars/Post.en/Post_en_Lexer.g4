@@ -99,9 +99,6 @@ COMMA : ',' ;
 PERIOD: '.' ;
 DIGIT : [0-9] ;
 
-IDENTIFIER 
-    : ('a'..'z' | 'A'..'Z'|'@'|'#')('a'..'z' | 'A'..'Z'|'@'|'#')*
-    ;
 WS
 	: ' ' -> channel(HIDDEN)
 	;
@@ -523,5 +520,7 @@ STREETDESIGNATORLONG:
   'WELLS' |
   'CROSSING'
   ;
-
+IDENTIFIER 
+    : ('a'..'z' | 'A'..'Z'|'@'|'#')('a'..'z' | 'A'..'Z'|'@'|'#')*
+    ;
 UNKNOWN  : . ; 

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
 using System.Linq;
-using System.Text;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Mnx.Antlr.Post.Grammars;
@@ -12,9 +11,9 @@ namespace Mnx.Antlr.Post.Listeners
 {
     public class DefaultListener : IPost_en_ParserListener
     {
-        const string SPACE =" ";
+        private const string SPACE =" ";
         //private DateTime dateTime;
-        private string _address;
+        private Location _location;
         //private string identifier;
         //private bool repeating;
         //private string hyperlink;
@@ -23,20 +22,24 @@ namespace Mnx.Antlr.Post.Listeners
 
         public void EnterPost(Post_en_Parser.PostContext context)
         {
-            Data = new PostData();
-            
+            Data = Data ?? new PostData();
+            _location = new Location();                   
         }
         public void EnterPhrase(Post_en_Parser.PhraseContext context)
         {
-            _address = String.Empty; //done here to support multiple phrases per statement
+            Data = Data ?? new PostData();
+            _location = new Location(); //done here to support multiple phrases per statement
         }
 
         public void ExitPhrase(Post_en_Parser.PhraseContext context)
         {
-            Data.Location = new Location
-            {
-                Address = _address
-            };
+            Data.Location = _location;
+        }
+        public void ExitPost(Post_en_Parser.PostContext context)
+        {
+            var validator = new PostDataValidator();
+            var result = validator.Validate(Data);
+            Debug.WriteLine("Valid Data: " + result.IsValid);
         }
         public void VisitTerminal(ITerminalNode node)
         {
@@ -90,14 +93,6 @@ namespace Mnx.Antlr.Post.Listeners
         {
         }
 
-        public void ExitPost(Post_en_Parser.PostContext context)
-        {
-           var validator = new PostDataValidator();
-            var result = validator.Validate(Data);
-            Debug.WriteLine("Valid Data: " + result.IsValid);
-        }
-
-
         public void EnterStatement(Post_en_Parser.StatementContext context)
         {
 
@@ -129,23 +124,27 @@ namespace Mnx.Antlr.Post.Listeners
         }
 
         public void ExitStreet_address(Post_en_Parser.Street_addressContext context)
-        {          
+        {
             var number = context.digits();
             var street = context.street_name();
             var city = context.city();//validate with db or db derived corpus
-
-            var streetText = street.GetText();
             
-            var cityText = city.GetText();
+            var streetDesignator = street.STREETDESIGNATOR() ?? street.STREETDESIGNATORLONG(); 
+            var streetText = String.Join(SPACE, street.IDENTIFIER().Select(item => item.GetText()));
+            if (streetDesignator != null) //STREETDESIGNATOR is being picked up as IDENTIFIER
+                streetText += SPACE + streetDesignator.GetText();
+            
             var numberText = number.GetText();
+            var cityText = city.GetText();
+            var regionText = string.Empty; //lookup from city name and scope to market to find region
 
-            var result = new StringBuilder();
-            result.Append(numberText)
-                .Append(streetText)
-                .Append(cityText);
-            _address = result.ToString();
-            //or is it just this?
-            //_address = context.GetText();
+            _location = new Location()
+            {
+                Address = numberText + SPACE + streetText,
+                City = cityText,
+                Region = regionText,
+                //Identifiers = 
+            };
         }
 
         public void EnterPronoun(Post_en_Parser.PronounContext context)
