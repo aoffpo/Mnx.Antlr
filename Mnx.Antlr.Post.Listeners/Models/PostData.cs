@@ -14,5 +14,6 @@ namespace Mnx.Antlr.Post.Listeners.Models
         public DateTime StartDate { get; set; }
         public DateTime EndDate { get; set; }
         public bool IsRecurring { get; set; }
+        public string CronExpression { get; set; } //if recurring, generate cron expression
     }
 }
