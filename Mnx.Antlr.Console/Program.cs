@@ -27,21 +27,15 @@ namespace Mnx.Antlr.Console
             ParserRuleContext tree = parser.prog();
             var walker = new ParseTreeWalker();
 
-      //      var stringWriter = new StringWriter();
-     //     var styleBuilder = new CssBuilder();
-         
-       //   using (var writer = new HtmlTextWriter(stringWriter))
-       //   {
             var listener = new SqlToPocoListener();                
-//          writer.RenderBeginTag(HtmlTextWriterTag.Html);
+
             walker.Walk(listener, tree);
             var output = listener.Result;
-//          writer.RenderEndTag();//html
-                
-       //   }
-            System.Console.WriteLine(output);           
-            File.WriteAllText("output.txt",output);
-            Process.Start("output.txt");
+
+            System.Console.WriteLine(output);
+            var outputFileName = args[0].Replace(".sql", ".cs");
+            File.WriteAllText(outputFileName, output);
+            Process.Start(outputFileName);
         }
     }
 }

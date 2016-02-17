@@ -29,6 +29,7 @@ dmlStatement : setStatement
 			 | ifStatement
 			 | dropTableStatement
 			 | insertStatement
+			 | declareStatement
 			 ;
  //Id
  //   | QuotedId | ;
@@ -129,6 +130,8 @@ ifStatement : IF OBJECT_ID LPAREN IDENTIFIER RPAREN IS NOT NULL dropTableStateme
 varcharStatement :  (VARCHAR | NVARCHAR | NCHAR | CHAR) LPAREN DIGIT* RPAREN;
 decimalStatement :  DECIMAL LPAREN DIGIT+ COMMA DIGIT+ RPAREN;
 dropTableStatement : DROP TABLE tempTableName ;
+declareStatement : DECLARE variableName (INT | LONG);
+
 unionAll : UNION ALL ;
 toggle : ON
     | OFF;

@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 using System.Web.UI;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
@@ -339,7 +338,7 @@ namespace Mnx.Antlr.Console.Listeners
             columnName = columnName.Replace("]", "");
             value = value.Replace("N'", "");
             value = value.Replace("'", "");
-            var datatype = "";
+            string datatype;
             _typeLookup.TryGetValue(columnName, out datatype);
 
             //map columns to css created in CREATE Table
@@ -413,6 +412,14 @@ namespace Mnx.Antlr.Console.Listeners
         public void ExitDropTableStatement(Sql_reducedParser.DropTableStatementContext context)
         {
             
+        }
+
+        public void EnterDeclareStatement(Sql_reducedParser.DeclareStatementContext context)
+        {
+        }
+
+        public void ExitDeclareStatement(Sql_reducedParser.DeclareStatementContext context)
+        {
         }
 
         public void EnterUnionAll(Sql_reducedParser.UnionAllContext context)

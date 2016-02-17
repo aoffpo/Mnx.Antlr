@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 2013
-VisualStudioVersion = 12.0.40629.0
+# Visual Studio 14
+VisualStudioVersion = 14.0.24720.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mnx.Antlr.Grammars", "Mnx.Antlr.Grammars\Mnx.Antlr.Grammars.csproj", "{4B1318B3-9B3F-4A3C-A679-69599F4D98E3}"
 EndProject
@@ -17,6 +17,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".nuget", ".nuget", "{198BBF
 		.nuget\NuGet.targets = .nuget\NuGet.targets
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SqlToCF.Tests", "SqlToCF.Tests\SqlToCF.Tests.csproj", "{18E375C3-6D4A-4AE6-BBEE-961DB7B8AE6B}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -31,6 +33,10 @@ Global
 		{F8319383-11A7-45E4-AAD7-21957A977341}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F8319383-11A7-45E4-AAD7-21957A977341}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F8319383-11A7-45E4-AAD7-21957A977341}.Release|Any CPU.Build.0 = Release|Any CPU
+		{18E375C3-6D4A-4AE6-BBEE-961DB7B8AE6B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{18E375C3-6D4A-4AE6-BBEE-961DB7B8AE6B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{18E375C3-6D4A-4AE6-BBEE-961DB7B8AE6B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{18E375C3-6D4A-4AE6-BBEE-961DB7B8AE6B}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

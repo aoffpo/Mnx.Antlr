@@ -44,7 +44,7 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitProg(Sql_reducedParser.ProgContext context)
         {
-            _result.Append(");");
+            _result.AppendLine(");");
         }
 
         public void EnterBatch(Sql_reducedParser.BatchContext context)
@@ -84,7 +84,13 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitSelectStatement(Sql_reducedParser.SelectStatementContext context)
         {
-            
+            var tableName = context.selectQuery().GetText();//.columnNameQualified().FirstOrDefault().GetText();
+            _result.AppendFormat("{0}Repository.FirstOrDefault(p=>p.{1} = \"{2}\" && p.{3} == {4};",
+                tableName,
+                "wherevarname1",
+                "wherevarvalue1",
+                "wherevarname2,",
+                "wherevarvalue2");
         }
 
         public void EnterSelectQuery(Sql_reducedParser.SelectQueryContext context)
@@ -292,20 +298,20 @@ namespace Mnx.Antlr.Console.Listeners
             var value = context.LITERAL() == null ? "null" : context.LITERAL().GetText();
 
             var columnName = context.columnName().GetText();
-            columnName = columnName.Replace("[", "")
-                .Replace("]", "")
+            columnName = columnName.Replace("[", string.Empty)
+                .Replace("]", string.Empty)
                 .Replace("_ID", "Id")
-                .Replace("_", "");
-            value = value.Replace("N'", "").
-                Replace("'", "");
-            var datatype = "";
+                .Replace("_", string.Empty);
+            value = value.Replace("N'", string.Empty).
+                Replace("'", string.Empty);
+            var datatype = string.Empty;
             _typeLookup.TryGetValue(columnName, out datatype);
             if (datatype != null)
             {
                 if (datatype.Contains("date"))
                 {
 
-                    value = String.Format("DateTime.Parse(\"{0}\");", value);
+                    value = string.Format("DateTime.Parse(\"{0}\")", value);
                 }
                 else if (datatype.Contains("char"))
                 {
@@ -374,8 +380,18 @@ namespace Mnx.Antlr.Console.Listeners
         }
 
         public void ExitDropTableStatement(Sql_reducedParser.DropTableStatementContext context)
+        {           
+        }
+
+        public void EnterDeclareStatement(Sql_reducedParser.DeclareStatementContext context)
         {
-            
+        }
+
+        public void ExitDeclareStatement(Sql_reducedParser.DeclareStatementContext context)
+        {
+            var variableName = context.variableName().GetText();
+
+            _result.AppendFormat("var {0} =  ", variableName);
         }
 
         public void EnterUnionAll(Sql_reducedParser.UnionAllContext context)
@@ -450,7 +466,7 @@ namespace Mnx.Antlr.Console.Listeners
                 _objectType = context.tableName().GetText();
                 _collectionType = _objectType + "s";
 
-                var addOrUpdateStatement = String.Format("context.{0}.AddOrUpdate(x => x.Id,", _collectionType);
+                var addOrUpdateStatement = string.Format("context.{0}.AddOrUpdate(x => x.Id,", _collectionType);
                 _result.AppendLine(addOrUpdateStatement);
             }
         }
