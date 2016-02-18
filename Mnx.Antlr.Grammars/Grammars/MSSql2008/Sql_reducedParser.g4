@@ -38,7 +38,7 @@ dmlStatement : setStatement
 // SELECT Statement
 // :::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::;
 selectStatement : selectQuery;
-selectQuery : SELECT columnItemList fromClause
+selectQuery : SELECT (inlineSelectList | columnItemList) fromClause (whereClause)?
 			| SELECT ((LITERAL | NULL) AS IDENTIFIER) (COMMA (LITERAL | NULL) AS columnNameQualified)* 
 ; 
 columnItemList : columnNameList
@@ -56,9 +56,13 @@ columnWildQualified : columnWild
 columnWildQualifiedList : columnWildQualified (COMMA columnWildQualified)*;
 
 fromClause : FROM tableName;
-////WhereClause : WHERE Predicate
-////    |
-////    ;
+//@Account2PurposeCapitalPlanning = Purpose_ID
+inlineSelectList : selectEqualsExpression (COMMA selectEqualsExpression)* ; 
+whereClause : WHERE predicateList ;
+predicateList : equalsExpression (AND equalsExpression)*;
+selectEqualsExpression : sqlvar EQ (DIGIT+ | IDENTIFIER) ;
+equalsExpression : columnName EQ (DIGIT+ | IDENTIFIER);
+
 //source : sourceRowset;
 //sourceRowset : variableName;
  
@@ -130,7 +134,7 @@ ifStatement : IF OBJECT_ID LPAREN IDENTIFIER RPAREN IS NOT NULL dropTableStateme
 varcharStatement :  (VARCHAR | NVARCHAR | NCHAR | CHAR) LPAREN DIGIT* RPAREN;
 decimalStatement :  DECIMAL LPAREN DIGIT+ COMMA DIGIT+ RPAREN;
 dropTableStatement : DROP TABLE tempTableName ;
-declareStatement : DECLARE variableName (INT | LONG);
+declareStatement : DECLARE sqlvar (INT | LONG);
 
 unionAll : UNION ALL ;
 toggle : ON
@@ -144,6 +148,9 @@ objectName
 	;
 columnName 
 	: (LBRACKET)? anyname (RBRACKET)? 
+	;
+sqlvar
+	: AMPERSAND anyname
 	;
 tableName 
 	: anyname 

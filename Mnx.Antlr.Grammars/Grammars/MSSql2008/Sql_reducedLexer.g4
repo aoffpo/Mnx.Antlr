@@ -6,6 +6,7 @@ Single_Line_Comment : '--' ~[\r\n]* -> channel(HIDDEN);
 Multiline_Comment : '/*' .*? ( '*/' | EOF ) -> channel(HIDDEN);
 
 ASTERISK : '*';
+AMPERSAND : '@' ;
 COMMA : ',' ;
 DOT : '.';
 EQ : '=' ;
@@ -21,6 +22,7 @@ COLON : ':' ;
 
 ACTION : A C T I O N ;
 ALL : A L L ;
+AND : A N D ;
 AS : A S ;
 BIT : B I T ;
 CHAR : C H A R ;

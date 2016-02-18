@@ -1,8 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Data.Entity.Design.PluralizationServices;
+using System.Diagnostics;
+using System.Globalization;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Mnx.Antlr.Grammars.SqlReduced;
@@ -15,7 +16,8 @@ namespace Mnx.Antlr.Console.Listeners
         private string _collectionType;
         private StringBuilder _result = new StringBuilder();
         public string Result { get { return _result.ToString(); } }
-        private Dictionary<string, string> _typeLookup = new Dictionary<string, string>();
+        private readonly Dictionary<string, string> _typeLookup = new Dictionary<string, string>();
+        private readonly PluralizationService _pluralizationService = PluralizationService.CreateService(CultureInfo.GetCultureInfo("en-us"));
 
         public void VisitTerminal(ITerminalNode node)
         {
@@ -84,13 +86,7 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitSelectStatement(Sql_reducedParser.SelectStatementContext context)
         {
-            var tableName = context.selectQuery().GetText();//.columnNameQualified().FirstOrDefault().GetText();
-            _result.AppendFormat("{0}Repository.FirstOrDefault(p=>p.{1} = \"{2}\" && p.{3} == {4};",
-                tableName,
-                "wherevarname1",
-                "wherevarvalue1",
-                "wherevarname2,",
-                "wherevarvalue2");
+
         }
 
         public void EnterSelectQuery(Sql_reducedParser.SelectQueryContext context)
@@ -180,7 +176,73 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitFromClause(Sql_reducedParser.FromClauseContext context)
         {
-            
+            var tableName = context.tableName().GetText();
+            tableName = _pluralizationService.Pluralize(tableName.Replace("DSI.", string.Empty));
+            _result.AppendFormat("context.{0}.FirstOrDefault(p=>", tableName);
+        }
+
+        public void EnterInlineSelectList(Sql_reducedParser.InlineSelectListContext context)
+        {
+        }
+
+        public void ExitInlineSelectList(Sql_reducedParser.InlineSelectListContext context)
+        {
+
+        }
+
+        public void EnterWhereClause(Sql_reducedParser.WhereClauseContext context)
+        {
+        }
+
+        public void ExitWhereClause(Sql_reducedParser.WhereClauseContext context)
+        {
+        }
+
+        public void EnterPredicateList(Sql_reducedParser.PredicateListContext context)
+        {
+        }
+
+        public void ExitPredicateList(Sql_reducedParser.PredicateListContext context)
+        {
+            //foreach (var predicate in context.predicateEquals())
+            //{
+            //    _result.AppendFormat("p.{0} = {1}", predicate.columnName().GetText(), predicate.IDENTIFIER().GetText());
+            //    if (predicate != context.predicateEquals().Last())
+            //    {
+            //        _result.Append(" && ");
+            //    }
+            //}
+            _result.Remove(_result.Length - 4,4);
+        }
+
+        public void EnterSelectEqualsExpression(Sql_reducedParser.SelectEqualsExpressionContext context)
+        {
+        }
+
+        public void ExitSelectEqualsExpression(Sql_reducedParser.SelectEqualsExpressionContext context)
+        {
+        }
+
+        public void EnterEqualsExpression(Sql_reducedParser.EqualsExpressionContext context)
+        {
+        }
+
+        public void ExitEqualsExpression(Sql_reducedParser.EqualsExpressionContext context)
+        {
+            var sqlvar = string.Empty;
+            string identifier = null;
+            var property = context.columnName().GetText().Replace("_ID", "Id");
+            if (context.DIGIT() != null)
+            {
+                sqlvar = string.Join(string.Empty, context.DIGIT().Select(item => item.GetText()));
+            }
+            if (context.IDENTIFIER() != null)
+            {
+                identifier = context.IDENTIFIER().GetText().Replace("'", "\"");
+            }
+            _result.AppendFormat("p.{0} == {1}", property, 
+                identifier ?? sqlvar);
+            _result.Append(" && ");
         }
 
         public void EnterCreateTableStatement(Sql_reducedParser.CreateTableStatementContext context)
@@ -389,9 +451,9 @@ namespace Mnx.Antlr.Console.Listeners
 
         public void ExitDeclareStatement(Sql_reducedParser.DeclareStatementContext context)
         {
-            var variableName = context.variableName().GetText();
+            var variableName = context.sqlvar().GetText();
 
-            _result.AppendFormat("var {0} =  ", variableName);
+            _result.AppendFormat("var {0} = ", variableName.Replace("@",string.Empty));
         }
 
         public void EnterUnionAll(Sql_reducedParser.UnionAllContext context)
@@ -442,6 +504,14 @@ namespace Mnx.Antlr.Console.Listeners
         public void ExitColumnName(Sql_reducedParser.ColumnNameContext context)
         {
             
+        }
+
+        public void EnterSqlvar(Sql_reducedParser.SqlvarContext context)
+        {
+        }
+
+        public void ExitSqlvar(Sql_reducedParser.SqlvarContext context)
+        {
         }
 
         public void EnterTableName(Sql_reducedParser.TableNameContext context)

@@ -31,7 +31,7 @@ namespace SqlToCF.Tests
                 SELECT @Account2PurposeCapitalPlanning = Purpose_ID
                 FROM DSI.Purpose
                 WHERE PurposeValueName = '*Capital Planning' AND AccountSummary_ID = 2";
-            const string csStatement = "var Account2PurposeCapitalPlanning = purposeRepository.FirstOrDefault(p=>p.PurposeValueName = \"*CapitalPlanning\" && p.AccountSummaryId == 2);";
+            const string csStatement = "var Account2PurposeCapitalPlanning = context.Purposes.FirstOrDefault(p=>p.PurposeValueName == \"*Capital Planning\" && p.AccountSummaryId == 2);";
 
             Parse(sqlStatement);
             Assert.AreEqual(csStatement, _listener.Result);
