@@ -66,6 +66,7 @@
     <Compile Include="Models\CronExSlot.cs" />
     <Compile Include="Models\Location.cs" />
     <Compile Include="Models\PostData.cs" />
+    <Compile Include="Models\QuartzIntervalUnit.cs" />
     <Compile Include="Models\RecurrencePattern.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Validators\PostDataValidator.cs" />
