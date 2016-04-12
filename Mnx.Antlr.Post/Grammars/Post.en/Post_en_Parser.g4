@@ -1,17 +1,17 @@
 parser grammar Post_en_Parser;
 options { tokenVocab=Post_en_Lexer; } 
-@parser::header {#pragma warning disable 3021}
+//@parser::header {#pragma warning disable 3021}
 
 post
 	: statement EOF
 	;
 
 statement 
-	: phrase+ //hashtags //user_references //hyperlink
+	: (phrase)+ //hashtags //user_references //hyperlink
 	;
 
 phrase 
-	: auxiliary_verb_phrase
+	: auxiliary_verb_phrase 
 	| transitive_verb_phrase
 	;
 //predicate
@@ -43,8 +43,11 @@ preposition : COMMA | TO | FROM | IN | ON | AT | OF | WITH ;
 meal : LUNCH | DINNER | BREAKFAST ;
 
 street_name : IDENTIFIER+ (STREETDESIGNATOR PERIOD? | STREETDESIGNATORLONG)?;
-city : IDENTIFIER+ ;
+city : IDENTIFIER+ punctuation? ;
 digits
  : DIGIT DIGIT*
  ;
+punctuation
+    : PERIOD
+    | EXCLAMATIONPOINT ;
  unknowns : UNKNOWN+ ; 

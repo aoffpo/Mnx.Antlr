@@ -1,11 +1,14 @@
 ﻿using System;
+using System.Diagnostics;
 using Antlr4.Runtime;
+using Couchbase;
+using Mnx.Antlr.Data.Models;
+using Mnx.Antlr.Data.Repositories;
 using Mnx.Antlr.Post.Grammars;
 using Mnx.Antlr.Post.Listeners;
 using NUnit.Framework;
-using Mnx.Antlr.Post.Listeners.Models;
 
-namespace Mnx.Antlr.Post.Tests
+namespace Mnx.Antlr.Post.Tests.Listeners
 {
     [TestFixture]
     public class ListenerTests : TestBase
@@ -16,38 +19,84 @@ namespace Mnx.Antlr.Post.Tests
         readonly PostData _postData = new PostData() { Timestamp = new DateTime(2014, 5, 5, 12, 0, 0) };
         DefaultListener _listener;
         Post_en_Parser _parser;
+        private Cluster _cluster;
+        private MarketRepository _marketRepository;
+
         [SetUp]
         public void Setup()
         {
+            _cluster = new Cluster();
+            _marketRepository = new MarketRepository(0)
+            {
+                Bucket = _cluster.OpenBucket("truck")
+            };
 
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            _marketRepository.Bucket.Dispose();
+            _cluster.Dispose();
         }
         private void Parse(string input)
         {
             var stream = new AntlrInputStream(input); //not IDisposable
             ITokenSource lexer = new Post_en_Lexer(stream);
             ITokenStream tokens = new CommonTokenStream(lexer);//not IDisposable
-            _parser = _parser ?? new Post_en_Parser(tokens);
-            _listener = _listener ?? new DefaultListener();
+            _parser = new Post_en_Parser(tokens);
+            _listener = new DefaultListener(_marketRepository);
             if (!_parser.ParseListeners.Contains(_listener))
             {
                 _parser.AddParseListener(_listener);
             }
-            _parser.post();
+            _parser.post();           
         }
 
-        [Test]
-        public void SimpleTest_Address()
+        private readonly object[] _addressStringsAndResults =
         {
-            //XXX START HERE XXX//
-            var data = "We are at 214 Hunt St in Durham";
-            var expected =
-                new Location()
-                {
-                    Address = "214 Hunt St",
-                    City = "Durham",
-                    Region = String.Empty,
-                };
-            Parse(data);
+            new object[] {"We are at 214 Hunt St in Durham",
+                new Location{Address = "214 Hunt St",City = "Durham",Region = "NC" }},
+
+            new object[] {"Lunch is at 3000 Centre Green Way, Cary. Serving from 11:30-1:30 today!",
+                new Location{Address = "3000 Centre Green Way",City = "Cary",Region = "NC" }},
+
+            new object[] { "Serving Now at Duke by the Chapel  - Chapel Drive  Durham  Until 9:00 PM EST http://t.co/zVSQr9KWqr", 
+                new Location{Address = "Chapel Drive",City = "Durham",Region = "NC" }},
+
+            new object[] { "Come help us christen the bar Sip! @sipwinetweet at 1059 Darrington Dr, Cary, tonight from 6-9ish.... http://t.co/tRt48MvJTj", 
+                new Location{Address = "1059 Darrington Dr",City = "Cary",Region ="NC" }},
+            
+            new object[] { "Lunch today were at Leith Porsche,Audi,Jag at the Cary Auto 11:30-2!", 
+                new Location{Address = "",City = "",Region = "NC" }},
+
+            new object[] { "We have TWO carts out today! One at @ganyardhillfarm 319 Sherron Rd, Durham  one at @DorcasCary 187 High House Rd. Cary 11AM-until", 
+                new Location{Address = "19 Sherron Rd",City = "Durham",Region = "NC" }},
+
+            new object[] { "Tonight, we will be at Sub Noir Brewing Company in Raleigh from 6 til..", 
+                new Location{Address = "",City = "Raleigh",Region = "NC" }},
+
+            new object[] { "We will set at Qualcomm today in Raleigh with @Traditionssweet! We will be at 8041 Arco Corporate Drive until 1:30!", 
+                new Location{Address = "8041 Arco Corporate Drive",City = "Raleigh",Region ="NC" }},
+           
+                new object[] { "Today, Better catch us #FAST at  OVAL PARK ^_^ 5:00pm – 6:30 210 West Club Blvd, Durham", 
+                new Location{Address = "210 West Club Blvd",City = "Durham",Region = "NC" }},
+
+            new object[] { "Join us for lunch today 2510 Meridian parkway in Durham.  11:30-1:30. Dinner at The Point Apartments in Chapel Hill. 5-8pm",
+                new Location{Address = "2510 Meridian parkway",City = "Durham",Region ="NC"}}
+        };
+
+        [Test, TestCaseSource("_addressStringsAndResults")]
+        public void AddressTest_ParsesAddresses(string data, Location expected)
+        {
+            try
+            {
+                Parse(data);
+            }
+            catch (Exception e)
+            {
+                Debug.WriteLine(e);
+            }
             AssertLocationsAreEqual(expected, _listener.Data.Location);
         }
         [Test]
@@ -59,34 +108,7 @@ namespace Mnx.Antlr.Post.Tests
             var date1 = _listener.Data.StartDate;
             var date2 = _listener.Data.EndDate;
             Assert.IsTrue(date1 == _today.AddHours(11).AddMinutes(30), "Assertion 1a:" + data);
-            Assert.IsTrue(date2 == _today.AddHours(13).AddMinutes(30), "Assertion 1b:" + data); //needs to be pm...
-
-            data = "Serving Now at Duke by the Chapel  - Chapel Drive  Durham  Until 9:00 PM EST http://t.co/zVSQr9KWqr";
-            Parse(data);
-            data = "Come help us christen the bar Sip! @sipwinetweet at 1059 Darrington Dr, Cary, tonight from " +
-                   "6-9ish.... http://t.co/tRt48MvJTj";
-            Parse(data);
-            data = "Lunch today were at Leith Porsche,Audi,Jag at the Cary Auto 11:30-2!";
-            Parse(data);
-            data = "We have TWO carts out today! One at @ganyardhillfarm 319 Sherron Rd, Durham  one at " +
-                   "@DorcasCary 187 High House Rd. Cary 11AM-until";
-            Parse(data);
-            data = "Tonight, we will be at Sub Noir Brewing Company in Raleigh from 6 til..";
-            Parse(data);
-            data = "We will set at Qualcomm today in Raleigh with @Traditionssweet! We will be at 8041 Arco Corporate Drive until 1:30!";
-            Parse(data);
-            data = "Today, Better catch us #FAST at  OVAL PARK ^_^ 5:00pm – 6:30 210 West Club Blvd, Durham";
-            Parse(data);
-            data = "Join us for lunch today 2510 Meridian parkway in Durham.  11:30-1:30. Dinner at The Point Apartments in Chapel Hill. 5-8pm";
-            Parse(data);
-            //KoKyu ONDO Tonight on Rigsbee &amp; Geer in Downtown #Durham - 
-            //
-            //@Fullsteam Cackalacky Tempura Fish TaKo (or... http://t.co/AzmRM7y8T0
-
-            //#BigYellow @ChirbaChirba Dinner!!!
-            //Duke U west quad TONIGHT!
-            //from 5-9
-            //CC: @dukeunion @DukeLDOC @DukePerformance @DukeU @DukeU_NrsngSchl
+            Assert.IsTrue(date2 == _today.AddHours(13).AddMinutes(30), "Assertion 1b:" + data);
         }
         [Ignore]
         [Test]
@@ -99,17 +121,20 @@ namespace Mnx.Antlr.Post.Tests
             Assert.IsTrue(date1 == _postData.Timestamp, "Assertion 2a:" + data);
             Assert.IsTrue(date2 == _today.AddHours(13).AddMinutes(30), "Assertion 2b:" + data);
         }
-     
+
         [Test]
         public void TestDateFormatC()
         {
             var data = "Craving pork? Catch us @RaleighBrewing tonight from 6-9";
 
-            var date1 = _dates[0];
-            var date2 = _dates[1];
-            Assert.IsTrue(date1 == _today.AddHours(18).AddMinutes(00), "Assertion 3a:" + data);
-            Assert.IsTrue(date2 == _today.AddHours(21).AddMinutes(00), "Assertion 3b:" + data);
+            Parse(data);
+
+            var date1 = _listener.Data.StartDate;
+            var date2 = _listener.Data.EndDate;
+            Assert.IsTrue(date1 == _today.AddHours(18).AddMinutes(00), "Assertion 3a:" + data, date1);
+            Assert.IsTrue(date2 == _today.AddHours(21).AddMinutes(00), "Assertion 3b:" + data, date2);
         }
+
         [Test]
         public void TestDateFormatT35()
         {

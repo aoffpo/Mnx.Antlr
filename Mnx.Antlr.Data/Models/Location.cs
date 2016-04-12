@@ -1,4 +1,4 @@
-﻿namespace Mnx.Antlr.Post.Listeners.Models
+﻿namespace Mnx.Antlr.Data.Models
 {
     public class Location
     {

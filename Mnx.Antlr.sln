@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mnx.Antlr.Post.Listeners", 
 		{4B1318B3-9B3F-4A3C-A679-69599F4D98E3} = {4B1318B3-9B3F-4A3C-A679-69599F4D98E3}
 	EndProjectSection
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Mnx.Antlr.Data", "Mnx.Antlr.Data\Mnx.Antlr.Data.csproj", "{F3ED17A3-A07F-4966-847E-9D966CCA1CA3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{715DC3F2-5A75-4917-80CE-95C7601625F8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{715DC3F2-5A75-4917-80CE-95C7601625F8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{715DC3F2-5A75-4917-80CE-95C7601625F8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F3ED17A3-A07F-4966-847E-9D966CCA1CA3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F3ED17A3-A07F-4966-847E-9D966CCA1CA3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F3ED17A3-A07F-4966-847E-9D966CCA1CA3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F3ED17A3-A07F-4966-847E-9D966CCA1CA3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

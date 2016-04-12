@@ -1,5 +1,5 @@
 lexer grammar Post_en_Lexer;
-@lexer::header {#pragma warning disable 3021}
+//@lexer::header {#pragma warning disable 3021}
 //------------------------------------
 //Time of day
 //------------------------------------
@@ -97,6 +97,7 @@ AND : A N D ;
 //--------------------------------------
 COMMA : ',' ;
 PERIOD: '.' ;
+EXCLAMATIONPOINT: '!' ;
 DIGIT : [0-9] ;
 
 WS

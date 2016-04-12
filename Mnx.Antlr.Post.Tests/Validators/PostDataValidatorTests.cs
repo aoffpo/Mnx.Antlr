@@ -1,7 +1,7 @@
 ﻿using Mnx.Antlr.Post.Listeners.Validators;
 using NUnit.Framework;
 
-namespace Mnx.Antlr.Post.Tests
+namespace Mnx.Antlr.Post.Tests.Validators
 {
     [TestFixture]
     public class PostDataValidatorTests : TestBase

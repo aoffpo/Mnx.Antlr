@@ -4,13 +4,19 @@ using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
 using Mnx.Antlr.Post.Grammars;
-using Mnx.Antlr.Post.Listeners.Models;
+using Mnx.Antlr.Data.Models;
+using Mnx.Antlr.Data.Repositories.Contracts;
 using Mnx.Antlr.Post.Listeners.Validators;
 
 namespace Mnx.Antlr.Post.Listeners
 {
     public class DefaultListener : IPost_en_ParserListener
     {
+        private readonly IMarketRepository _marketRepository;
+        public DefaultListener(IMarketRepository marketRepository)
+        {
+            _marketRepository = marketRepository;
+        }
         private const string SPACE =" ";
         //private DateTime dateTime;
         private Location _location;
@@ -27,8 +33,7 @@ namespace Mnx.Antlr.Post.Listeners
         }
         public void EnterPhrase(Post_en_Parser.PhraseContext context)
         {
-            Data = Data ?? new PostData();
-            _location = new Location(); //done here to support multiple phrases per statement
+            Data = Data ?? new PostData();            
         }
 
         public void ExitPhrase(Post_en_Parser.PhraseContext context)
@@ -136,7 +141,14 @@ namespace Mnx.Antlr.Post.Listeners
             
             var numberText = number.GetText();
             var cityText = city.GetText();
-            var regionText = string.Empty; //lookup from city name and scope to market to find region
+            var cityLookup = _marketRepository.MatchText(cityText);           
+            var regionText = string.Empty;
+            if (cityLookup != null)
+            {
+                var split = cityLookup.Name.Split(',');
+                cityText =split[0];
+                regionText = split[1];
+            }
 
             _location = new Location()
             {
@@ -200,6 +212,15 @@ namespace Mnx.Antlr.Post.Listeners
         }
 
         public void ExitDigits(Post_en_Parser.DigitsContext context)
+        {
+        }
+
+        public void EnterPunctuation(Post_en_Parser.PunctuationContext context)
+        {
+            //consider changing context on period or exclamation point
+        }
+
+        public void ExitPunctuation(Post_en_Parser.PunctuationContext context)
         {
         }
 

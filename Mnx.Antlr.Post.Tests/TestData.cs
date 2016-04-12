@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Mnx.Antlr.Post.Listeners.Models;
+using Mnx.Antlr.Data.Models;
 
 namespace Mnx.Antlr.Post.Tests
 {

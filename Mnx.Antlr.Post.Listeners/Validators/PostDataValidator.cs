@@ -1,6 +1,6 @@
 ﻿using System;
 using FluentValidation;
-using Mnx.Antlr.Post.Listeners.Models;
+using Mnx.Antlr.Data.Models;
 
 namespace Mnx.Antlr.Post.Listeners.Validators
 {

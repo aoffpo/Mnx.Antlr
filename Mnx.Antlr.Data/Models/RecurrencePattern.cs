@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Globalization;
 
-namespace Mnx.Antlr.Post.Listeners.Models
+namespace Mnx.Antlr.Data.Models
 {
 
     public class RecurrencePattern﻿
