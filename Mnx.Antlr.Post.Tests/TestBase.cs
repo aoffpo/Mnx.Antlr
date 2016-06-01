@@ -7,6 +7,7 @@ namespace Mnx.Antlr.Post.Tests
     {
         public void AssertLocationsAreEqual(Location expected, Location actual)
         {
+            Assert.IsNotNull(actual,"Location is null");
             Assert.AreEqual(expected.Address, actual.Address, "Address");
             Assert.AreEqual(expected.City, actual.City, "City");
             Assert.AreEqual(expected.Identifiers, actual.Identifiers, "Identifiers");

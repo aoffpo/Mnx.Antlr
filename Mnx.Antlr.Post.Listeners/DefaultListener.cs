@@ -1,5 +1,4 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Antlr4.Runtime;
 using Antlr4.Runtime.Tree;
@@ -17,7 +16,7 @@ namespace Mnx.Antlr.Post.Listeners
         {
             _marketRepository = marketRepository;
         }
-        private const string SPACE =" ";
+        private const string Space =" ";
         //private DateTime dateTime;
         private Location _location;
         //private string identifier;
@@ -135,9 +134,9 @@ namespace Mnx.Antlr.Post.Listeners
             var city = context.city();//validate with db or db derived corpus
             
             var streetDesignator = street.STREETDESIGNATOR() ?? street.STREETDESIGNATORLONG(); 
-            var streetText = String.Join(SPACE, street.IDENTIFIER().Select(item => item.GetText()));
+            var streetText = string.Join(Space, street.IDENTIFIER().Select(item => item.GetText()));
             if (streetDesignator != null) //STREETDESIGNATOR is being picked up as IDENTIFIER
-                streetText += SPACE + streetDesignator.GetText();
+                streetText += Space + streetDesignator.GetText();
             
             var numberText = number.GetText();
             var cityText = city.GetText();
@@ -145,14 +144,13 @@ namespace Mnx.Antlr.Post.Listeners
             var regionText = string.Empty;
             if (cityLookup != null)
             {
-                var split = cityLookup.Name.Split(',');
-                cityText =split[0];
-                regionText = split[1];
+                cityText = cityLookup.Name;
+                regionText = cityLookup.State;
             }
 
             _location = new Location()
             {
-                Address = numberText + SPACE + streetText,
+                Address = numberText + Space + streetText,
                 City = cityText,
                 Region = regionText,
                 //Identifiers = 

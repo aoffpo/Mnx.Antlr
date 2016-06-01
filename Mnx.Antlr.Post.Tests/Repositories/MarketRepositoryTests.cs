@@ -1,5 +1,7 @@
-﻿using Couchbase;
+﻿using System.Threading.Tasks;
+using Couchbase;
 using Couchbase.Core;
+using Mnx.Antlr.Data.Models;
 using Mnx.Antlr.Data.Repositories;
 using NUnit.Framework;
 
@@ -14,10 +16,15 @@ namespace Mnx.Antlr.Post.Tests.Repositories
         [SetUp]
         public void Setup()
         {
-            _cluster = new Cluster();
+            _cluster = new Cluster("couchbaseClients/couchbase");
+            
+            var bucket = _cluster.OpenBucket("truck");
+            Assert.IsTrue(_cluster.IsOpen("truck"));
+           // Assert.IsTrue(bucket.Exists("market_0"));
+            var val = bucket.Get<Market>("market_0");
             _marketRepository = new MarketRepository(0)
             {
-                Bucket =_cluster.OpenBucket("truck")
+                Bucket = bucket
             };
         }
 

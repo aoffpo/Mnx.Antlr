@@ -13,13 +13,16 @@ namespace Mnx.Antlr.Data.Repositories
         }
         public Market Get(string key)
         {
+            var market = Bucket.Get<object>(key);
             return Bucket.Get<Market>(key).Value;
         }
 
         public City MatchText(string text)
         {
             var market = Get("market_" + MarketId);
-            return market.Cities.Find(c => text.Contains(c.Name.Split(',')[0]));
+            
+            var retval = market.Cities.Find(c => text.Contains(c.Name));
+            return retval;
         }
     }
 }

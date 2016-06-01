@@ -12,9 +12,9 @@ namespace Mnx.Antlr.Post.Tests.Listeners
 {
     [TestFixture]
     public class ListenerTests : TestBase
-    { 
+    {
         readonly DateTime[] _dates = new DateTime[2];
-       // DateTime _now = new DateTime(2014, 5, 5, 12, 0, 0);
+        // DateTime _now = new DateTime(2014, 5, 5, 12, 0, 0);
         DateTime _today = new DateTime(2014, 5, 5, 0, 0, 0);
         readonly PostData _postData = new PostData() { Timestamp = new DateTime(2014, 5, 5, 12, 0, 0) };
         DefaultListener _listener;
@@ -25,12 +25,13 @@ namespace Mnx.Antlr.Post.Tests.Listeners
         [SetUp]
         public void Setup()
         {
-            _cluster = new Cluster();
+            _cluster = new Cluster("couchbaseClients/couchbase");
             _marketRepository = new MarketRepository(0)
-            {
+            { 
                 Bucket = _cluster.OpenBucket("truck")
             };
-
+            var obj =_marketRepository.Bucket.Get<Market>("market_0");
+            Console.WriteLine(obj);
         }
 
         [TearDown]
@@ -50,10 +51,10 @@ namespace Mnx.Antlr.Post.Tests.Listeners
             {
                 _parser.AddParseListener(_listener);
             }
-            _parser.post();           
+            _parser.post();
         }
 
-        private readonly object[] _addressStringsAndResults =
+        private static readonly object[] AddressStringsAndResults =
         {
             new object[] {"We are at 214 Hunt St in Durham",
                 new Location{Address = "214 Hunt St",City = "Durham",Region = "NC" }},
@@ -86,7 +87,7 @@ namespace Mnx.Antlr.Post.Tests.Listeners
                 new Location{Address = "2510 Meridian parkway",City = "Durham",Region ="NC"}}
         };
 
-        [Test, TestCaseSource("_addressStringsAndResults")]
+        [Test, TestCaseSource("AddressStringsAndResults")]
         public void AddressTest_ParsesAddresses(string data, Location expected)
         {
             try
@@ -102,7 +103,7 @@ namespace Mnx.Antlr.Post.Tests.Listeners
         [Test]
         public void TestDateFormatA()
         {
-            
+
             string data = "Lunch is at 3000 Centre Green Way, Cary. Serving from 11:30-1:30 today!";
             Parse(data);
             var date1 = _listener.Data.StartDate;
@@ -110,12 +111,12 @@ namespace Mnx.Antlr.Post.Tests.Listeners
             Assert.IsTrue(date1 == _today.AddHours(11).AddMinutes(30), "Assertion 1a:" + data);
             Assert.IsTrue(date2 == _today.AddHours(13).AddMinutes(30), "Assertion 1b:" + data);
         }
-        [Ignore]
+        [Ignore("pending work")]
         [Test]
         public void TestDateFormatB()
         {
             var data = "We are all setup at Keystone Tech Park, Building 1. Serving till 1:30. 523 Davis Dr, RTP, NC http://t.co/j6cNCqMKwe";
-          
+
             var date1 = _dates[0];
             var date2 = _dates[1];
             Assert.IsTrue(date1 == _postData.Timestamp, "Assertion 2a:" + data);
@@ -146,7 +147,7 @@ namespace Mnx.Antlr.Post.Tests.Listeners
             Assert.IsTrue(date2 == _today.AddHours(20).AddMinutes(00), "Assertion 4b:" + data);
         }
 
-        
+
         [Test]
         public void TestDateFormatT37()
         {
@@ -179,7 +180,7 @@ namespace Mnx.Antlr.Post.Tests.Listeners
             var date2 = dates[1];
             var expected = _today.AddHours(13).AddMinutes(30);
             Assert.AreEqual(_today.AddHours(11).AddMinutes(30), date1, "Time1 was " + date1);
-            Assert.AreEqual(expected,date2, "Time2 was " + date2);
+            Assert.AreEqual(expected, date2, "Time2 was " + date2);
         }
         [Test]
         public void TestDate_DinnerTil()
@@ -223,7 +224,7 @@ namespace Mnx.Antlr.Post.Tests.Listeners
         [Test]
         public void TestDate_DE32_2()
         {
-            var data ="Come Tailgate with @baguettaboutit today before the UNC Football game! 9am-12pm TODAY! Try our UEgginMeOn breakfast sandwich! @GoHeels @UNC";
+            var data = "Come Tailgate with @baguettaboutit today before the UNC Football game! 9am-12pm TODAY! Try our UEgginMeOn breakfast sandwich! @GoHeels @UNC";
             Parse(data);
             var date1 = _dates[0];
             var date2 = _dates[1];
@@ -323,19 +324,19 @@ namespace Mnx.Antlr.Post.Tests.Listeners
         public void TestDate_WrongStartDate()
         {
             var data = "@BigCatBobCat 2945 S. Miami blvd #Durham NC - on the corner of TW Alexander behind @sheetz :) We're open until 2 today!";
-        //StartDate: 6/23/2014 2:00:00 AM
-        //EndDate: 6/23/2014 12:09:47 PM";
+            //StartDate: 6/23/2014 2:00:00 AM
+            //EndDate: 6/23/2014 12:09:47 PM";
             Parse(data);
             var date1 = _dates[0];
             var date2 = _dates[1];
 
             Assert.IsTrue(date1 == _today.AddHours(8), "Time1 was " + date1); //use default timestamp in test;
             Assert.IsTrue(date2 == _today.AddHours(14), "Time2 was " + date2);
-        }      
+        }
         [Test]
         public void TestDate_Slashes()
         {
-            var data ="The cold is not stopping us. If you're at work in @downtowndurham swing by for a melty #GrilledCheese.  300 North Duke St. 11:15am-1:15/30pm";
+            var data = "The cold is not stopping us. If you're at work in @downtowndurham swing by for a melty #GrilledCheese.  300 North Duke St. 11:15am-1:15/30pm";
             Parse(data);
             var date1 = _dates[0];
             var date2 = _dates[1];
@@ -347,13 +348,13 @@ namespace Mnx.Antlr.Post.Tests.Listeners
         public void Test_TomorrowFail()
         {
             // //Tomorrow, 12:00-1:30 @libertytax corporate offices 1716 Corporate Landing Pkwy VA Beach VA 23454!
-            var data =  "Due to road conditions, we WILL NOT be at Duke Coffeehouse tonight.Back on Duke W Campus Quad tomorrow, 5-9:30!";
+            var data = "Due to road conditions, we WILL NOT be at Duke Coffeehouse tonight.Back on Duke W Campus Quad tomorrow, 5-9:30!";
             Parse(data);
             var date1 = _dates[0];
             var date2 = _dates[1];
 
             Assert.IsTrue(date1 == _today.AddDays(1).AddHours(17), "Time1 was " + date1);
-            Assert.IsTrue(date2 == _today.AddDays(1).AddHours(21).AddMinutes(30), "Time2 was " + date2);          
+            Assert.IsTrue(date2 == _today.AddDays(1).AddHours(21).AddMinutes(30), "Time2 was " + date2);
         }
 
         [Test]
